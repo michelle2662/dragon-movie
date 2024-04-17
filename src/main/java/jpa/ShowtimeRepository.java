@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import io.swagger.model.Showtime;
 
-@Repository
+//@Repository
 public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
 
 }

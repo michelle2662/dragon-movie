@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import io.swagger.model.Reservation;
 
-@Repository
+//@Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
 }

@@ -8,6 +8,9 @@ import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.Valid;
 
 /**
@@ -18,6 +21,11 @@ import javax.validation.Valid;
 
 @Entity
 public class Movie {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+	
 	@JsonProperty("title")
 	private String title = null;
 
