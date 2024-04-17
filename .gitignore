@@ -1,0 +1,19 @@
+# Maven 
+target/
+
+# Intellij
+.idea/
+
+# Eclipse
+.settings/
+bin/
+tmp/
+.metadata
+.classpath
+.project
+
+
+*.class
+*.jar
+*.war
+
