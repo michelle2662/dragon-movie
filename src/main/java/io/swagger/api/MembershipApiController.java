@@ -36,31 +36,33 @@ import java.util.Map;
 @RestController
 public class MembershipApiController implements MembershipApi {
 
-    private static final Logger log = LoggerFactory.getLogger(MembershipApiController.class);
+	private static final Logger log = LoggerFactory.getLogger(MembershipApiController.class);
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    private final HttpServletRequest request;
+	private final HttpServletRequest request;
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public MembershipApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-    }
+	@org.springframework.beans.factory.annotation.Autowired
+	public MembershipApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+		this.objectMapper = objectMapper;
+		this.request = request;
+	}
 
-    public ResponseEntity<Membership> membershipPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Membership body
-) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Membership>(objectMapper.readValue("{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"email\" : \"john.smith@email.com\"\n}", Membership.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Membership>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
+	public ResponseEntity<Membership> membershipPost(
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Membership body) {
+		String accept = request.getHeader("Accept");
+		if (accept != null && accept.contains("application/json")) {
+			try {
+				return new ResponseEntity<Membership>(objectMapper.readValue(
+						"{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Smith\",\n  \"email\" : \"john.smith@email.com\"\n}",
+						Membership.class), HttpStatus.NOT_IMPLEMENTED);
+			} catch (IOException e) {
+				log.error("Couldn't serialize response for content type application/json", e);
+				return new ResponseEntity<Membership>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 
-        return new ResponseEntity<Membership>(HttpStatus.NOT_IMPLEMENTED);
-    }
+		return new ResponseEntity<Membership>(HttpStatus.NOT_IMPLEMENTED);
+	}
 
 }

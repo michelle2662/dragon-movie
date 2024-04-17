@@ -2,11 +2,11 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.Entity;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * Membership
@@ -15,6 +15,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 
 
+@Entity
 public class Membership   {
   @JsonProperty("firstName")
   private String firstName = null;
@@ -35,7 +36,6 @@ public class Membership   {
    * @return firstName
    **/
   @Schema(example = "John", description = "")
-  
     public String getFirstName() {
     return firstName;
   }
@@ -54,7 +54,6 @@ public class Membership   {
    * @return lastName
    **/
   @Schema(example = "Smith", description = "")
-  
     public String getLastName() {
     return lastName;
   }
@@ -73,7 +72,6 @@ public class Membership   {
    * @return email
    **/
   @Schema(example = "john.smith@email.com", description = "")
-  
     public String getEmail() {
     return email;
   }
@@ -122,6 +120,6 @@ public class Membership   {
     if (o == null) {
       return "null";
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+		return o.toString().replace("\n", "\n    ");
+	}
 }
