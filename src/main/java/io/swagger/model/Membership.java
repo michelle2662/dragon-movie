@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.Valid;
+
 
 /**
  * Membership
@@ -33,16 +33,17 @@ public class Membership {
 	@JsonProperty("email")
 	private String email = null;
 
-	public Membership firstName(String firstName) {
-		this.firstName = firstName;
-		return this;
+	public Membership() {
+
 	}
 
-	/**
-	 * Get firstName
-	 * 
-	 * @return firstName
-	 **/
+	public Membership(Long id, String firstName, String lastName, String email) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+	}
+
 	@Schema(example = "John", description = "")
 	public String getFirstName() {
 		return firstName;
@@ -52,16 +53,6 @@ public class Membership {
 		this.firstName = firstName;
 	}
 
-	public Membership lastName(String lastName) {
-		this.lastName = lastName;
-		return this;
-	}
-
-	/**
-	 * Get lastName
-	 * 
-	 * @return lastName
-	 **/
 	@Schema(example = "Smith", description = "")
 	public String getLastName() {
 		return lastName;
@@ -71,16 +62,6 @@ public class Membership {
 		this.lastName = lastName;
 	}
 
-	public Membership email(String email) {
-		this.email = email;
-		return this;
-	}
-
-	/**
-	 * Get email
-	 * 
-	 * @return email
-	 **/
 	@Schema(example = "john.smith@email.com", description = "")
 	public String getEmail() {
 		return email;
@@ -110,24 +91,7 @@ public class Membership {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class Membership {\n");
-
-		sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");
-		sb.append("    lastName: ").append(toIndentedString(lastName)).append("\n");
-		sb.append("    email: ").append(toIndentedString(email)).append("\n");
-		sb.append("}");
-		return sb.toString();
+		return "Membership [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
 	}
 
-	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
-	 */
-	private String toIndentedString(java.lang.Object o) {
-		if (o == null) {
-			return "null";
-		}
-		return o.toString().replace("\n", "\n    ");
-	}
 }

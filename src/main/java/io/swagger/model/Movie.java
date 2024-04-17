@@ -53,18 +53,25 @@ public class Movie {
 	@JsonProperty("upcomingRelease")
 	private Boolean upcomingRelease = null;
 
-	public Movie title(String title) {
-		this.title = title;
-		return this;
+	public Movie() {
+		
 	}
 
-	/**
-	 * Get title
-	 * 
-	 * @return title
-	 **/
-	@Schema(example = "Oppenheimer", description = "")
+	public Movie(String title, String director, String genre, String rating, String length, LocalDate releaseDate,
+			BigDecimal reviewScore, Boolean currentlyPlaying, Boolean upcomingRelease) {
+		super();
+		this.title = title;
+		this.director = director;
+		this.genre = genre;
+		this.rating = rating;
+		this.length = length;
+		this.releaseDate = releaseDate;
+		this.reviewScore = reviewScore;
+		this.currentlyPlaying = currentlyPlaying;
+		this.upcomingRelease = upcomingRelease;
+	}
 
+	@Schema(example = "Oppenheimer", description = "")
 	public String getTitle() {
 		return title;
 	}
@@ -73,16 +80,6 @@ public class Movie {
 		this.title = title;
 	}
 
-	public Movie director(String director) {
-		this.director = director;
-		return this;
-	}
-
-	/**
-	 * Get director
-	 * 
-	 * @return director
-	 **/
 	@Schema(example = "Christopher Nolan", description = "")
 	public String getDirector() {
 		return director;
@@ -92,16 +89,6 @@ public class Movie {
 		this.director = director;
 	}
 
-	public Movie genre(String genre) {
-		this.genre = genre;
-		return this;
-	}
-
-	/**
-	 * Get genre
-	 * 
-	 * @return genre
-	 **/
 	@Schema(example = "Thriller", description = "")
 	public String getGenre() {
 		return genre;
@@ -111,16 +98,6 @@ public class Movie {
 		this.genre = genre;
 	}
 
-	public Movie rating(String rating) {
-		this.rating = rating;
-		return this;
-	}
-
-	/**
-	 * Get rating
-	 * 
-	 * @return rating
-	 **/
 	@Schema(example = "R", description = "")
 	public String getRating() {
 		return rating;
@@ -130,16 +107,6 @@ public class Movie {
 		this.rating = rating;
 	}
 
-	public Movie length(String length) {
-		this.length = length;
-		return this;
-	}
-
-	/**
-	 * Get length
-	 * 
-	 * @return length
-	 **/
 	@Schema(example = "3h5m", description = "")
 	public String getLength() {
 		return length;
@@ -149,16 +116,6 @@ public class Movie {
 		this.length = length;
 	}
 
-	public Movie releaseDate(LocalDate releaseDate) {
-		this.releaseDate = releaseDate;
-		return this;
-	}
-
-	/**
-	 * Get releaseDate
-	 * 
-	 * @return releaseDate
-	 **/
 	@Schema(example = "Fri Jul 21 01:00:00 BST 2023", description = "")
 	@Valid
 	public LocalDate getReleaseDate() {
@@ -169,16 +126,6 @@ public class Movie {
 		this.releaseDate = releaseDate;
 	}
 
-	public Movie reviewScore(BigDecimal reviewScore) {
-		this.reviewScore = reviewScore;
-		return this;
-	}
-
-	/**
-	 * Get reviewScore
-	 * 
-	 * @return reviewScore
-	 **/
 	@Schema(example = "8.9", description = "")
 	@Valid
 	public BigDecimal getReviewScore() {
@@ -189,16 +136,6 @@ public class Movie {
 		this.reviewScore = reviewScore;
 	}
 
-	public Movie currentlyPlaying(Boolean currentlyPlaying) {
-		this.currentlyPlaying = currentlyPlaying;
-		return this;
-	}
-
-	/**
-	 * Get currentlyPlaying
-	 * 
-	 * @return currentlyPlaying
-	 **/
 	@Schema(example = "true", description = "")
 	public Boolean isCurrentlyPlaying() {
 		return currentlyPlaying;
@@ -208,16 +145,6 @@ public class Movie {
 		this.currentlyPlaying = currentlyPlaying;
 	}
 
-	public Movie upcomingRelease(Boolean upcomingRelease) {
-		this.upcomingRelease = upcomingRelease;
-		return this;
-	}
-
-	/**
-	 * Get upcomingRelease
-	 * 
-	 * @return upcomingRelease
-	 **/
 	@Schema(example = "false", description = "")
 	public Boolean isUpcomingRelease() {
 		return upcomingRelease;
@@ -252,30 +179,9 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class Movie {\n");
-
-		sb.append("    title: ").append(toIndentedString(title)).append("\n");
-		sb.append("    director: ").append(toIndentedString(director)).append("\n");
-		sb.append("    genre: ").append(toIndentedString(genre)).append("\n");
-		sb.append("    rating: ").append(toIndentedString(rating)).append("\n");
-		sb.append("    length: ").append(toIndentedString(length)).append("\n");
-		sb.append("    releaseDate: ").append(toIndentedString(releaseDate)).append("\n");
-		sb.append("    reviewScore: ").append(toIndentedString(reviewScore)).append("\n");
-		sb.append("    currentlyPlaying: ").append(toIndentedString(currentlyPlaying)).append("\n");
-		sb.append("    upcomingRelease: ").append(toIndentedString(upcomingRelease)).append("\n");
-		sb.append("}");
-		return sb.toString();
+		return "Movie [title=" + title + ", director=" + director + ", genre=" + genre + ", rating=" + rating
+				+ ", length=" + length + ", releaseDate=" + releaseDate + ", reviewScore=" + reviewScore
+				+ ", currentlyPlaying=" + currentlyPlaying + ", upcomingRelease=" + upcomingRelease + "]";
 	}
 
-	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
-	 */
-	private String toIndentedString(java.lang.Object o) {
-		if (o == null) {
-			return "null";
-		}
-		return o.toString().replace("\n", "\n    ");
-	}
 }
