@@ -7,6 +7,7 @@ package io.swagger.api;
 
 import io.swagger.model.Movie;
 import io.swagger.model.Showtime;
+import io.swagger.model.ShowtimeRequestBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,7 +34,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
 @Validated
 public interface ShowtimesApi {
 
@@ -57,7 +58,7 @@ public interface ShowtimesApi {
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
     ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Showtime body
+, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 );
 
 
@@ -111,7 +112,7 @@ public interface ShowtimesApi {
         method = RequestMethod.PUT)
     ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
 , @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
-, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Showtime body
+, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 );
 
 }
