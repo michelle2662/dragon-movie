@@ -33,66 +33,55 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T09:54:05.273201+01:00[Europe/London]")
 @Validated
 public interface MoviesApi {
 
-    @Operation(summary = "Delete a movie", description = "Allows an admin to delete a movie", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successfully deleted movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
-    @RequestMapping(value = "/movies",
-        produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
-    ResponseEntity<Movie> moviesDelete(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to delete" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "title", required = true) String title
-);
+	@Operation(summary = "Delete a movie", description = "Allows an admin to delete a movie", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successfully deleted movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
 
+			@ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+	@RequestMapping(value = "/movies/{id}", produces = { "application/json" }, method = RequestMethod.DELETE)
+	ResponseEntity<Movie> moviesIdDelete(
+			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required = true, schema = @Schema()) @PathVariable("id") Integer id);
 
-    @Operation(summary = "Retrieve details about a movie", description = "Returns details about a specific movie", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successfully retrieved movie details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))) })
-    @RequestMapping(value = "/movies",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    ResponseEntity<Movie> moviesGet(@NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to get details about" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "title", required = true) String title
-);
+	@Operation(summary = "Retrieve details about a movie", description = "Returns details about a specific movie", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successfully retrieved movie details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))) })
+	@RequestMapping(value = "/movies/{id}", produces = { "application/json" }, method = RequestMethod.GET)
+	ResponseEntity<Movie> moviesIdGet(
+			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to get details about", required = true, schema = @Schema()) @PathVariable("id") Integer id);
 
+	@Operation(summary = "Update a movie", description = "Allows an admin to update a movie", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successfully updated movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
 
-    @Operation(summary = "Create a movie", description = "Allows an admin to create a movie", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "successfully created movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
-    @RequestMapping(value = "/movies",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Movie body
-);
+			@ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+	@RequestMapping(value = "/movies/{id}", produces = { "application/json" }, method = RequestMethod.PUT)
+	ResponseEntity<Movie> moviesIdPut(
+			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required = true, schema = @Schema()) @PathVariable("id") Integer id,
+			@NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update", required = true, schema = @Schema()) @Valid @RequestParam(value = "title", required = true) String title,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated director", schema = @Schema()) @Valid @RequestParam(value = "director", required = false) String director,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated genre", schema = @Schema()) @Valid @RequestParam(value = "genre", required = false) String genre,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated rating", schema = @Schema()) @Valid @RequestParam(value = "rating", required = false) String rating,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated length", schema = @Schema()) @Valid @RequestParam(value = "length", required = false) String length,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated review score", schema = @Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated release date", schema = @Schema()) @Valid @RequestParam(value = "releaseDate", required = false) String releaseDate,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the movie is currently playing", schema = @Schema()) @Valid @RequestParam(value = "currentlyPlaying", required = false) Boolean currentlyPlaying,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release", schema = @Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease);
 
+	@Operation(summary = "Create a movie", description = "Allows an admin to create a movie", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "successfully created movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
 
-    @Operation(summary = "Update a movie", description = "Allows an admin to update a movie", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "successfully updated movie", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movie.class))),
-        
-        @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
-    @RequestMapping(value = "/movies",
-        produces = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Movie> moviesPut(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "title", required = true) String title
-, @Parameter(in = ParameterIn.QUERY, description = "the updated director" ,schema=@Schema()) @Valid @RequestParam(value = "director", required = false) String director
-, @Parameter(in = ParameterIn.QUERY, description = "the updated genre" ,schema=@Schema()) @Valid @RequestParam(value = "genre", required = false) String genre
-, @Parameter(in = ParameterIn.QUERY, description = "the updated rating" ,schema=@Schema()) @Valid @RequestParam(value = "rating", required = false) String rating
-, @Parameter(in = ParameterIn.QUERY, description = "the updated length" ,schema=@Schema()) @Valid @RequestParam(value = "length", required = false) String length
-, @Parameter(in = ParameterIn.QUERY, description = "the updated review score" ,schema=@Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore
-, @Parameter(in = ParameterIn.QUERY, description = "the updated release date" ,schema=@Schema()) @Valid @RequestParam(value = "releaseDate", required = false) String releaseDate
-, @Parameter(in = ParameterIn.QUERY, description = "the updated value for if the movie is currently playing" ,schema=@Schema()) @Valid @RequestParam(value = "currentlyPlaying", required = false) Boolean currentlyPlaying
-, @Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release" ,schema=@Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease
-);
+			@ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+	@RequestMapping(value = "/movies", produces = { "application/json" }, consumes = {
+			"application/json" }, method = RequestMethod.POST)
+	ResponseEntity<Movie> moviesPost(
+			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Movie body);
 
 }
-

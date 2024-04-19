@@ -32,19 +32,23 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T09:54:05.273201+01:00[Europe/London]")
 @Validated
 public interface MembershipApi {
 
-    @Operation(summary = "Create a membership", description = "Create a new membership", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "successfully created membership", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Membership.class))) })
-    @RequestMapping(value = "/membership",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Membership> membershipPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Membership body
-);
+	@Operation(summary = "Get details of a membership", description = "Returns details of a specific membership", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "successfully retrieved membership details", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Membership.class))) })
+	@RequestMapping(value = "/membership/{id}", produces = { "application/json" }, method = RequestMethod.GET)
+	ResponseEntity<Membership> membershipIdGet(
+			@Parameter(in = ParameterIn.PATH, description = "the id of the membership", required = true, schema = @Schema()) @PathVariable("id") Integer id);
+
+	@Operation(summary = "Create a membership", description = "Create a new membership", tags = {})
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "successfully created membership", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Membership.class))) })
+	@RequestMapping(value = "/membership", produces = { "application/json" }, consumes = {
+			"application/json" }, method = RequestMethod.POST)
+	ResponseEntity<Membership> membershipPost(
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Membership body);
 
 }
-
