@@ -1,6 +1,9 @@
 package io.swagger.api;
 
 import java.math.BigDecimal;
+import java.net.URI;
+
+import io.swagger.jpa.MovieRepository;
 import io.swagger.model.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +35,11 @@ public class MoviesApiController implements MoviesApi {
 	private final ObjectMapper objectMapper;
 
 	private final HttpServletRequest request;
+	
+	private static final String API_PATH = "apis/MORGANMAZER/dragon/1.0/";
+	
+	@Autowired
+	private MovieRepository movieRepository;
 
 	@Autowired
 	public MoviesApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -102,6 +112,36 @@ public class MoviesApiController implements MoviesApi {
 	public ResponseEntity<Movie> moviesPost(
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Movie body) {
+		String token = request.getHeader("access_token");
+		
+		if (token != null) { // TODO: actual token verification
+			// save the movie
+			movieRepository.save(body);
+			
+			// build URI for newly-created movie
+			String host = System.getProperty("host", "localhost");
+			String port = System.getProperty("port", "8080");
+			String baseUrl = "http://{host}:{port}/" + API_PATH + "movie/";
+			
+			URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(body.getId());
+			
+			return ResponseEntity.created(uri).body(body);
+		} else {
+			return new ResponseEntity<Movie>(HttpStatus.FORBIDDEN);
+		}
+	}
+
+	public ResponseEntity<Movie> moviesPut(
+			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+			@NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update", required = true, schema = @Schema()) @Valid @RequestParam(value = "title", required = true) String title,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated director", schema = @Schema()) @Valid @RequestParam(value = "director", required = false) String director,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated genre", schema = @Schema()) @Valid @RequestParam(value = "genre", required = false) String genre,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated rating", schema = @Schema()) @Valid @RequestParam(value = "rating", required = false) String rating,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated length", schema = @Schema()) @Valid @RequestParam(value = "length", required = false) String length,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated review score", schema = @Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated release date", schema = @Schema()) @Valid @RequestParam(value = "releaseDate", required = false) String releaseDate,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the movie is currently playing", schema = @Schema()) @Valid @RequestParam(value = "currentlyPlaying", required = false) Boolean currentlyPlaying,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release", schema = @Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease) {
 		String accept = request.getHeader("Accept");
 		if (accept != null && accept.contains("application/json")) {
 			try {

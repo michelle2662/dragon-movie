@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -44,7 +45,16 @@ public class Membership {
 		this.email = email;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Schema(example = "John", description = "")
+	@NotNull
 	public String getFirstName() {
 		return firstName;
 	}
@@ -54,6 +64,7 @@ public class Membership {
 	}
 
 	@Schema(example = "Smith", description = "")
+	@NotNull
 	public String getLastName() {
 		return lastName;
 	}
@@ -63,6 +74,7 @@ public class Membership {
 	}
 
 	@Schema(example = "john.smith@email.com", description = "")
+	@NotNull
 	public String getEmail() {
 		return email;
 	}
@@ -91,7 +103,8 @@ public class Membership {
 
 	@Override
 	public String toString() {
-		return "Membership [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + "]";
+		return "Membership [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ "]";
 	}
 
 }

@@ -12,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * Movie
@@ -57,9 +60,10 @@ public class Movie {
 		
 	}
 
-	public Movie(String title, String director, String genre, String rating, String length, LocalDate releaseDate,
+	public Movie(Long id, String title, String director, String genre, String rating, String length, LocalDate releaseDate,
 			BigDecimal reviewScore, Boolean currentlyPlaying, Boolean upcomingRelease) {
 		super();
+		this.id = id;
 		this.title = title;
 		this.director = director;
 		this.genre = genre;
@@ -71,7 +75,16 @@ public class Movie {
 		this.upcomingRelease = upcomingRelease;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Schema(example = "Oppenheimer", description = "")
+	@NotNull
 	public String getTitle() {
 		return title;
 	}
@@ -128,6 +141,8 @@ public class Movie {
 
 	@Schema(example = "8.9", description = "")
 	@Valid
+	@Min(0)
+	@Max(10)
 	public BigDecimal getReviewScore() {
 		return reviewScore;
 	}
@@ -179,8 +194,8 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [title=" + title + ", director=" + director + ", genre=" + genre + ", rating=" + rating
-				+ ", length=" + length + ", releaseDate=" + releaseDate + ", reviewScore=" + reviewScore
+		return "Movie [id=" + id + ", title=" + title + ", director=" + director + ", genre=" + genre + ", rating="
+				+ rating + ", length=" + length + ", releaseDate=" + releaseDate + ", reviewScore=" + reviewScore
 				+ ", currentlyPlaying=" + currentlyPlaying + ", upcomingRelease=" + upcomingRelease + "]";
 	}
 
