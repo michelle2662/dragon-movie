@@ -73,7 +73,7 @@ public interface ShowtimesApi {
         @ApiResponse(responseCode = "404", description = "Not found. Showtime not found.") })
     @RequestMapping(value = "/showtimes/{showtime_id}",
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
+    ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 , @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
 );
 
@@ -84,7 +84,7 @@ public interface ShowtimesApi {
     @RequestMapping(value = "/showtimes/{showtime_id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Showtime> showtimesShowtimeIdGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve details for.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
+    ResponseEntity<Showtime> showtimesShowtimeIdGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve details for.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 );
 
 
@@ -94,7 +94,7 @@ public interface ShowtimesApi {
     @RequestMapping(value = "/showtimes/{showtime_id}/movies",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Movie>> showtimesShowtimeIdMoviesGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve movies for.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
+    ResponseEntity<List<Movie>> showtimesShowtimeIdMoviesGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve movies for.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 );
 
 
@@ -111,7 +111,7 @@ public interface ShowtimesApi {
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
     ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
+, @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 , @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 );
 

@@ -1,119 +1,138 @@
 package io.swagger.api;
 
+import io.swagger.jpa.ShowtimeRepository;
 import io.swagger.model.Movie;
 import io.swagger.model.Showtime;
 import io.swagger.model.ShowtimeRequestBody;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
 @RestController
 public class ShowtimesApiController implements ShowtimesApi {
 
     private static final Logger log = LoggerFactory.getLogger(ShowtimesApiController.class);
 
-    private final ObjectMapper objectMapper;
-
     private final HttpServletRequest request;
 
-    @org.springframework.beans.factory.annotation.Autowired
-    public ShowtimesApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
+    private static final String API_PATH = "apis/MORGANMAZER/dragon/2.0/showtimes/";
+
+    @Autowired
+    private ShowtimeRepository showtimeRepository;
+
+    @Autowired
+    public ShowtimesApiController(HttpServletRequest request) {
         this.request = request;
     }
 
     public ResponseEntity<List<Showtime>> showtimesGet() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Showtime>>(objectMapper.readValue("[ {\n  \"date_time\" : \"2023-12-15T20:00:00Z\",\n  \"theater_box_id\" : 5,\n  \"id\" : 104,\n  \"movie_id\" : 123\n}, {\n  \"date_time\" : \"2023-12-15T20:00:00Z\",\n  \"theater_box_id\" : 5,\n  \"id\" : 104,\n  \"movie_id\" : 123\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Showtime>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        log.info("GET /showtimes");
+
+        List<Showtime> showtimes = showtimeRepository.findAll();
+        return ResponseEntity.ok().body(showtimes);
+    }
+
+    public ResponseEntity<Void> showtimesPost(
+            @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+            @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
+
+        log.info("POST /showtimes");
+
+        String token = request.getHeader("access_token");
+
+        if (token != null && !token.isEmpty()) { // TODO: actual token verification
+            Showtime showtime = new Showtime();
+            showtime.setDateTime(body.getDateTime());
+            showtime.setMovieId(body.getMovieId());
+            showtime.setTheaterBoxId(body.getTheaterBoxId());
+
+            Showtime createdShowtime = showtimeRepository.save(showtime);
+
+            URI location = UriComponentsBuilder.fromPath(API_PATH + createdShowtime.getId()).build().toUri();
+            return ResponseEntity.created(location).build();
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
-        return new ResponseEntity<List<Showtime>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
-) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+    public ResponseEntity<Void> showtimesShowtimeIdDelete(
+            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId,
+            @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken) {
 
-    public ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
-,@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
+        log.info("DELETE /showtimes/{}", showtimeId);
 
-    public ResponseEntity<Showtime> showtimesShowtimeIdGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve details for.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
-) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Showtime>(objectMapper.readValue("{\n  \"date_time\" : \"2023-12-15T20:00:00Z\",\n  \"theater_box_id\" : 5,\n  \"id\" : 104,\n  \"movie_id\" : 123\n}", Showtime.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Showtime>(HttpStatus.INTERNAL_SERVER_ERROR);
+        String token = request.getHeader("access_token");
+
+        if (token != null && !token.isEmpty()) { // TODO: actual token verification
+            Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+            if (optionalShowtime.isPresent()) {
+                showtimeRepository.delete(optionalShowtime.get());
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
             }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
-        return new ResponseEntity<Showtime>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<List<Movie>> showtimesShowtimeIdMoviesGet(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve movies for.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
-) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Movie>>(objectMapper.readValue("[ {\n  \"upcomingRelease\" : false,\n  \"currentlyPlaying\" : true,\n  \"reviewScore\" : 8.9,\n  \"releaseDate\" : \"2023-07-21T00:00:00.000+00:00\",\n  \"director\" : \"Christopher Nolan\",\n  \"genre\" : \"Thriller\",\n  \"rating\" : \"R\",\n  \"length\" : \"3h5m\",\n  \"id\" : 123,\n  \"title\" : \"Oppenheimer\"\n}, {\n  \"upcomingRelease\" : false,\n  \"currentlyPlaying\" : true,\n  \"reviewScore\" : 8.9,\n  \"releaseDate\" : \"2023-07-21T00:00:00.000+00:00\",\n  \"director\" : \"Christopher Nolan\",\n  \"genre\" : \"Thriller\",\n  \"rating\" : \"R\",\n  \"length\" : \"3h5m\",\n  \"id\" : 123,\n  \"title\" : \"Oppenheimer\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Movie>>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Showtime> showtimesShowtimeIdGet(
+            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve details for.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId) {
+
+        log.info("GET /showtimes/{}", showtimeId);
+
+        Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+        return optionalShowtime.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<List<Movie>> showtimesShowtimeIdMoviesGet(
+            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to retrieve movies for.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId) {
+                log.info("GET /showtimes/{}/movies", showtimeId);
+
+                List<Movie> movies = showtimeRepository.findMoviesByShowtimeId(showtimeId);
+                return ResponseEntity.ok(movies);
+    }
+
+    public ResponseEntity<Void> showtimesShowtimeIdPut(
+            @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
+            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId,
+            @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
+
+        log.info("PUT /showtimes/{}", showtimeId);
+
+        String token = request.getHeader("access_token");
+
+        if (token != null && !token.isEmpty()) { // TODO: actual token verification
+            Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+            if (optionalShowtime.isPresent()) {
+                Showtime showtime = optionalShowtime.get();
+                showtime.setDateTime(body.getDateTime());
+                showtime.setMovieId(body.getMovieId());
+                showtime.setTheaterBoxId(body.getTheaterBoxId());
+
+                showtimeRepository.save(showtime);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
             }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
-        return new ResponseEntity<List<Movie>>(HttpStatus.NOT_IMPLEMENTED);
     }
-
-    public ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-,@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") String showtimeId
-,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
-) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
 }

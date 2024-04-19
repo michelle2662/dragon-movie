@@ -6,6 +6,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -17,8 +23,10 @@ import javax.validation.constraints.*;
 
 
 public class Showtime   {
-  @JsonProperty("id")
-  private Integer id = null;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id = null;
 
   @JsonProperty("date_time")
   private OffsetDateTime dateTime = null;
@@ -29,7 +37,11 @@ public class Showtime   {
   @JsonProperty("theater_box_id")
   private Integer theaterBoxId = null;
 
-  public Showtime id(Integer id) {
+  @ManyToOne
+  @JoinColumn(name = "movie_id", referencedColumnName = "id")
+  private Movie movie;
+
+  public Showtime id(Long id) {
     this.id = id;
     return this;
   }
@@ -41,11 +53,11 @@ public class Showtime   {
   @Schema(example = "104", required = true, description = "Unique identifier of the showtime.")
       @NotNull
 
-    public Integer getId() {
+    public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -89,6 +101,14 @@ public class Showtime   {
   public void setMovieId(Integer movieId) {
     this.movieId = movieId;
   }
+
+      public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
 
   public Showtime theaterBoxId(Integer theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
