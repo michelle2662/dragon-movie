@@ -63,7 +63,7 @@ public interface MoviesApi {
 	ResponseEntity<Movie> moviesIdPut(
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
 			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required = true, schema = @Schema()) @PathVariable("id") Integer id,
-			@NotNull @Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update", required = true, schema = @Schema()) @Valid @RequestParam(value = "title", required = true) String title,
+			@Parameter(in = ParameterIn.QUERY, description = "the updated movie title", schema = @Schema()) @Valid @RequestParam(value = "title", required = false) String title,
 			@Parameter(in = ParameterIn.QUERY, description = "the updated director", schema = @Schema()) @Valid @RequestParam(value = "director", required = false) String director,
 			@Parameter(in = ParameterIn.QUERY, description = "the updated genre", schema = @Schema()) @Valid @RequestParam(value = "genre", required = false) String genre,
 			@Parameter(in = ParameterIn.QUERY, description = "the updated rating", schema = @Schema()) @Valid @RequestParam(value = "rating", required = false) String rating,

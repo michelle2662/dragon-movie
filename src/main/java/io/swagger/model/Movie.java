@@ -129,7 +129,7 @@ public class Movie {
 		this.length = length;
 	}
 
-	@Schema(example = "Fri Jul 21 01:00:00 BST 2023", description = "")
+	@Schema(example = "2023-07-21", description = "")
 	@Valid
 	public LocalDate getReleaseDate() {
 		return releaseDate;

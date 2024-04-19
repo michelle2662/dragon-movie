@@ -2,7 +2,6 @@ package io.swagger.api;
 
 import io.swagger.jpa.MembershipRepository;
 import io.swagger.model.Membership;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
@@ -28,10 +24,6 @@ import java.util.Optional;
 public class MembershipApiController implements MembershipApi {
 
 	private static final Logger log = LoggerFactory.getLogger(MembershipApiController.class);
-
-	private final ObjectMapper objectMapper;
-
-	private final HttpServletRequest request;
 	
 	@Autowired
 	private MembershipRepository membershipRepository;
@@ -39,14 +31,12 @@ public class MembershipApiController implements MembershipApi {
 	private static final String API_PATH = "apis/MORGANMAZER/dragon/1.0/";
 
 	@Autowired
-	public MembershipApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-		this.objectMapper = objectMapper;
-		this.request = request;
+	public MembershipApiController() {
 	}
 
 	public ResponseEntity<Membership> membershipIdGet(
 			@Parameter(in = ParameterIn.PATH, description = "the id of the membership", required = true, schema = @Schema()) @PathVariable("id") Integer id) {
-		log.info("GET /membership with id " + id);
+		log.info("GET /membership id " + id);
 		
 		// retrieve membership
 		Optional<Membership> optionalMembership = membershipRepository.findById((long) id);
@@ -61,7 +51,7 @@ public class MembershipApiController implements MembershipApi {
 
 	public ResponseEntity<Membership> membershipPost(
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Membership body) {
-		log.info("POST /membership: " + body.toString());
+		log.info("POST /membership " + body.toString());
 		
 		// save the membership
 		membershipRepository.save(body);
