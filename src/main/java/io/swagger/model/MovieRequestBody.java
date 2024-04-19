@@ -6,29 +6,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * Movie
+ * MovieRequestBody
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T13:14:07.895681+01:00[Europe/London]")
 
-@Entity
-public class Movie {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
+public class MovieRequestBody {
 	@JsonProperty("title")
 	private String title = null;
 
@@ -56,34 +43,18 @@ public class Movie {
 	@JsonProperty("upcomingRelease")
 	private Boolean upcomingRelease = null;
 
-	public Movie() {
-		
-	}
-
-	public Movie(Long id, String title, String director, String genre, String rating, String length, LocalDate releaseDate,
-			BigDecimal reviewScore, Boolean currentlyPlaying, Boolean upcomingRelease) {
-		super();
-		this.id = id;
+	public MovieRequestBody title(String title) {
 		this.title = title;
-		this.director = director;
-		this.genre = genre;
-		this.rating = rating;
-		this.length = length;
-		this.releaseDate = releaseDate;
-		this.reviewScore = reviewScore;
-		this.currentlyPlaying = currentlyPlaying;
-		this.upcomingRelease = upcomingRelease;
+		return this;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	/**
+	 * Get title
+	 * 
+	 * @return title
+	 **/
 	@Schema(example = "Oppenheimer", description = "")
+	@NotNull
 	public String getTitle() {
 		return title;
 	}
@@ -92,6 +63,16 @@ public class Movie {
 		this.title = title;
 	}
 
+	public MovieRequestBody director(String director) {
+		this.director = director;
+		return this;
+	}
+
+	/**
+	 * Get director
+	 * 
+	 * @return director
+	 **/
 	@Schema(example = "Christopher Nolan", description = "")
 	public String getDirector() {
 		return director;
@@ -101,6 +82,16 @@ public class Movie {
 		this.director = director;
 	}
 
+	public MovieRequestBody genre(String genre) {
+		this.genre = genre;
+		return this;
+	}
+
+	/**
+	 * Get genre
+	 * 
+	 * @return genre
+	 **/
 	@Schema(example = "Thriller", description = "")
 	public String getGenre() {
 		return genre;
@@ -110,6 +101,16 @@ public class Movie {
 		this.genre = genre;
 	}
 
+	public MovieRequestBody rating(String rating) {
+		this.rating = rating;
+		return this;
+	}
+
+	/**
+	 * Get rating
+	 * 
+	 * @return rating
+	 **/
 	@Schema(example = "R", description = "")
 	public String getRating() {
 		return rating;
@@ -119,6 +120,16 @@ public class Movie {
 		this.rating = rating;
 	}
 
+	public MovieRequestBody length(String length) {
+		this.length = length;
+		return this;
+	}
+
+	/**
+	 * Get length
+	 * 
+	 * @return length
+	 **/
 	@Schema(example = "3h5m", description = "")
 	public String getLength() {
 		return length;
@@ -128,7 +139,17 @@ public class Movie {
 		this.length = length;
 	}
 
-	@Schema(example = "2023-07-21", description = "")
+	public MovieRequestBody releaseDate(LocalDate releaseDate) {
+		this.releaseDate = releaseDate;
+		return this;
+	}
+
+	/**
+	 * Get releaseDate
+	 * 
+	 * @return releaseDate
+	 **/
+	@Schema(example = "Fri Jul 21 01:00:00 BST 2023", description = "")
 	@Valid
 	public LocalDate getReleaseDate() {
 		return releaseDate;
@@ -138,10 +159,18 @@ public class Movie {
 		this.releaseDate = releaseDate;
 	}
 
+	public MovieRequestBody reviewScore(BigDecimal reviewScore) {
+		this.reviewScore = reviewScore;
+		return this;
+	}
+
+	/**
+	 * Get reviewScore
+	 * 
+	 * @return reviewScore
+	 **/
 	@Schema(example = "8.9", description = "")
 	@Valid
-	@Min(0)
-	@Max(10)
 	public BigDecimal getReviewScore() {
 		return reviewScore;
 	}
@@ -150,6 +179,16 @@ public class Movie {
 		this.reviewScore = reviewScore;
 	}
 
+	public MovieRequestBody currentlyPlaying(Boolean currentlyPlaying) {
+		this.currentlyPlaying = currentlyPlaying;
+		return this;
+	}
+
+	/**
+	 * Get currentlyPlaying
+	 * 
+	 * @return currentlyPlaying
+	 **/
 	@Schema(example = "true", description = "")
 	public Boolean isCurrentlyPlaying() {
 		return currentlyPlaying;
@@ -159,6 +198,16 @@ public class Movie {
 		this.currentlyPlaying = currentlyPlaying;
 	}
 
+	public MovieRequestBody upcomingRelease(Boolean upcomingRelease) {
+		this.upcomingRelease = upcomingRelease;
+		return this;
+	}
+
+	/**
+	 * Get upcomingRelease
+	 * 
+	 * @return upcomingRelease
+	 **/
 	@Schema(example = "false", description = "")
 	public Boolean isUpcomingRelease() {
 		return upcomingRelease;
@@ -176,13 +225,16 @@ public class Movie {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		Movie movie = (Movie) o;
-		return Objects.equals(this.title, movie.title) && Objects.equals(this.director, movie.director)
-				&& Objects.equals(this.genre, movie.genre) && Objects.equals(this.rating, movie.rating)
-				&& Objects.equals(this.length, movie.length) && Objects.equals(this.releaseDate, movie.releaseDate)
-				&& Objects.equals(this.reviewScore, movie.reviewScore)
-				&& Objects.equals(this.currentlyPlaying, movie.currentlyPlaying)
-				&& Objects.equals(this.upcomingRelease, movie.upcomingRelease);
+		MovieRequestBody movieRequestBody = (MovieRequestBody) o;
+		return Objects.equals(this.title, movieRequestBody.title)
+				&& Objects.equals(this.director, movieRequestBody.director)
+				&& Objects.equals(this.genre, movieRequestBody.genre)
+				&& Objects.equals(this.rating, movieRequestBody.rating)
+				&& Objects.equals(this.length, movieRequestBody.length)
+				&& Objects.equals(this.releaseDate, movieRequestBody.releaseDate)
+				&& Objects.equals(this.reviewScore, movieRequestBody.reviewScore)
+				&& Objects.equals(this.currentlyPlaying, movieRequestBody.currentlyPlaying)
+				&& Objects.equals(this.upcomingRelease, movieRequestBody.upcomingRelease);
 	}
 
 	@Override
@@ -193,8 +245,8 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", title=" + title + ", director=" + director + ", genre=" + genre + ", rating="
-				+ rating + ", length=" + length + ", releaseDate=" + releaseDate + ", reviewScore=" + reviewScore
+		return "MovieRequestBody [title=" + title + ", director=" + director + ", genre=" + genre + ", rating=" + rating
+				+ ", length=" + length + ", releaseDate=" + releaseDate + ", reviewScore=" + reviewScore
 				+ ", currentlyPlaying=" + currentlyPlaying + ", upcomingRelease=" + upcomingRelease + "]";
 	}
 

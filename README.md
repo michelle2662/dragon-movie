@@ -46,4 +46,3 @@ I'm not sure if this is the best way, but it's how I did it when I needed to upd
 1. Make sure the project still builds and runs and that the API definition looks correct in Swagger
 1. Copy the YAML file into src/main/resources so that the rest of the team can view the changes and build on them if necessary
 1. Commit the changes
-

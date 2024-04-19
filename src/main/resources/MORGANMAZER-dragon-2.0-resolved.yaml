@@ -9,6 +9,18 @@ servers:
   description: SwaggerHub API Auto Mocking
 paths:
   /movies:
+    get:
+      summary: Get all movies
+      description: Get details of all movies
+      responses:
+        "200":
+          description: A list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
     post:
       summary: Create a movie
       description: Allows an admin to create a movie
@@ -25,7 +37,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Movie'
+              $ref: '#/components/schemas/MovieRequestBody'
         required: true
       responses:
         "201":
@@ -81,7 +93,7 @@ paths:
       - name: title
         in: query
         description: the title of the movie to update
-        required: true
+        required: false
         style: form
         explode: true
         schema:
@@ -206,7 +218,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Membership'
+              $ref: '#/components/schemas/MembershipRequestBody'
         required: true
       responses:
         "201":
@@ -638,8 +650,6 @@ components:
         theater_box:
           $ref: '#/components/schemas/TheaterBox'
     Movie:
-      required:
-      - title
       type: object
       properties:
         id:
@@ -673,16 +683,60 @@ components:
         upcomingRelease:
           type: boolean
           example: false
+    MovieRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Oppenheimer
+        director:
+          type: string
+          example: Christopher Nolan
+        genre:
+          type: string
+          example: Thriller
+        rating:
+          type: string
+          example: R
+        length:
+          type: string
+          example: 3h5m
+        releaseDate:
+          type: string
+          format: date
+          example: 2023-07-21
+        reviewScore:
+          type: number
+          example: 8.9
+        currentlyPlaying:
+          type: boolean
+          example: true
+        upcomingRelease:
+          type: boolean
+          example: false
     Membership:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 34
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Smith
+        email:
+          type: string
+          format: email
+          example: john.smith@email.com
+    MembershipRequestBody:
       required:
       - email
       - firstName
       - lastName
       type: object
       properties:
-        id:
-          type: integer
-          example: 34
         firstName:
           type: string
           example: John
