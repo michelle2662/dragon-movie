@@ -10,16 +10,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Showtime
+ * ShowtimeRequestBody
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
 
 
-public class Showtime   {
-  @JsonProperty("id")
-  private Integer id = null;
-
+public class ShowtimeRequestBody   {
   @JsonProperty("date_time")
   private OffsetDateTime dateTime = null;
 
@@ -29,27 +26,7 @@ public class Showtime   {
   @JsonProperty("theater_box_id")
   private Integer theaterBoxId = null;
 
-  public Showtime id(Integer id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Unique identifier of the showtime.
-   * @return id
-   **/
-  @Schema(example = "104", required = true, description = "Unique identifier of the showtime.")
-      @NotNull
-
-    public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Showtime dateTime(OffsetDateTime dateTime) {
+  public ShowtimeRequestBody dateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -70,7 +47,7 @@ public class Showtime   {
     this.dateTime = dateTime;
   }
 
-  public Showtime movieId(Integer movieId) {
+  public ShowtimeRequestBody movieId(Integer movieId) {
     this.movieId = movieId;
     return this;
   }
@@ -90,7 +67,7 @@ public class Showtime   {
     this.movieId = movieId;
   }
 
-  public Showtime theaterBoxId(Integer theaterBoxId) {
+  public ShowtimeRequestBody theaterBoxId(Integer theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
     return this;
   }
@@ -119,24 +96,22 @@ public class Showtime   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Showtime showtime = (Showtime) o;
-    return Objects.equals(this.id, showtime.id) &&
-        Objects.equals(this.dateTime, showtime.dateTime) &&
-        Objects.equals(this.movieId, showtime.movieId) &&
-        Objects.equals(this.theaterBoxId, showtime.theaterBoxId);
+    ShowtimeRequestBody showtimeRequestBody = (ShowtimeRequestBody) o;
+    return Objects.equals(this.dateTime, showtimeRequestBody.dateTime) &&
+        Objects.equals(this.movieId, showtimeRequestBody.movieId) &&
+        Objects.equals(this.theaterBoxId, showtimeRequestBody.theaterBoxId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dateTime, movieId, theaterBoxId);
+    return Objects.hash(dateTime, movieId, theaterBoxId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Showtime {\n");
+    sb.append("class ShowtimeRequestBody {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dateTime: ").append(toIndentedString(dateTime)).append("\n");
     sb.append("    movieId: ").append(toIndentedString(movieId)).append("\n");
     sb.append("    theaterBoxId: ").append(toIndentedString(theaterBoxId)).append("\n");
