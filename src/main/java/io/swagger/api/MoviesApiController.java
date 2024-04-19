@@ -2,10 +2,12 @@ package io.swagger.api;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import io.swagger.jpa.MovieRepository;
 import io.swagger.model.Movie;
+import io.swagger.model.MovieRequestBody;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,6 +44,13 @@ public class MoviesApiController implements MoviesApi {
 	public MoviesApiController(HttpServletRequest request) {
 		this.request = request;
 	}
+	
+	public ResponseEntity<List<Movie>> moviesGet() {
+        log.info("GET /movies");
+        
+        List<Movie> movies = movieRepository.findAll();
+        return ResponseEntity.ok().body(movies);
+    }
 
 	public ResponseEntity<Movie> moviesIdDelete(
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
@@ -140,23 +149,35 @@ public class MoviesApiController implements MoviesApi {
 
 	public ResponseEntity<Movie> moviesPost(
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Movie body) {
-		log.info("POST /movies");
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody MovieRequestBody body) {
+		log.info("POST /movies " + body.toString());
 		
 		String token = request.getHeader("access_token");
 		
 		if (token != null && !token.isEmpty()) { // TODO: actual token verification
+			// convert MovieRequestBody to Movie
+			Movie movie = new Movie();
+			movie.setTitle(body.getTitle());
+			movie.setDirector(body.getDirector());
+			movie.setGenre(body.getGenre());
+			movie.setRating(body.getRating());
+			movie.setLength(body.getLength());
+			movie.setRating(body.getRating());
+			movie.setReleaseDate(body.getReleaseDate());
+			movie.setCurrentlyPlaying(body.isCurrentlyPlaying());
+			movie.setUpcomingRelease(body.isUpcomingRelease());
+			
 			// save the movie
-			movieRepository.save(body);
+			movieRepository.save(movie);
 			
 			// build URI for newly-created movie
 			String host = System.getProperty("host", "localhost");
 			String port = System.getProperty("port", "8080");
-			String baseUrl = "http://{host}:{port}/" + API_PATH + "movie/";
+			String baseUrl = "http://{host}:{port}/" + API_PATH + "movies/";
 			
-			URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(body.getId());
+			URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(movie.getId());
 			
-			return ResponseEntity.created(uri).body(body);
+			return ResponseEntity.created(uri).body(movie);
 		} else {
 			return new ResponseEntity<Movie>(HttpStatus.FORBIDDEN);
 		}

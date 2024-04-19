@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import io.swagger.jpa.MembershipRepository;
 import io.swagger.model.Membership;
+import io.swagger.model.MembershipRequestBody;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,20 +51,26 @@ public class MembershipApiController implements MembershipApi {
 	}
 
 	public ResponseEntity<Membership> membershipPost(
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody Membership body) {
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody MembershipRequestBody body) {
 		log.info("POST /membership " + body.toString());
 		
+		// convert MembershipRequestBody to Membership
+		Membership membership = new Membership();
+		membership.setFirstName(body.getFirstName());
+		membership.setLastName(body.getLastName());
+		membership.setEmail(body.getEmail());
+		
 		// save the membership
-		membershipRepository.save(body);
+		membershipRepository.save(membership);
 		
 		// build URI for newly created membership
 		String host = System.getProperty("host", "localhost");
 		String port = System.getProperty("port", "8080");
 		String baseUrl = "http://{host}:{port}/" + API_PATH + "membership/";
 		
-		URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(body.getId());
+		URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(membership.getId());
 		
-		return ResponseEntity.created(uri).body(body); 
+		return ResponseEntity.created(uri).body(membership); 
 	}
 
 }
