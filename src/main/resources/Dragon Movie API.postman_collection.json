@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "2066e9a6-32d9-4121-aae2-d1122d5273a0",
+		"name": "Dragon Movie API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33974804"
+	},
+	"item": [
+		{
+			"name": "Add Movie - Oppenheimer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Oppenheimer\",\n  \"director\": \"Christopher Nolan\",\n  \"genre\": \"Thriller\",\n  \"rating\": \"R\",\n  \"length\": \"3h5m\",\n  \"releaseDate\": \"2023-07-21\",\n  \"reviewScore\": 8.9,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/movies",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Movie - Dune",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Dune\",\n  \"director\": \"Denis Villeneuve\",\n  \"genre\": \"Science Fiction\",\n  \"rating\": \"PG-13\",\n  \"length\": \"2h35m\",\n  \"releaseDate\": \"2023-08-15\",\n  \"reviewScore\": 8.3,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/movies",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Movie - Avatar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Avatar\",\n  \"director\": \"James Cameron\",\n  \"genre\": \"Adventure\",\n  \"rating\": \"PG-13\",\n  \"length\": \"3h12m\",\n  \"releaseDate\": \"2023-12-17\",\n  \"reviewScore\": 8.7,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/movies",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Theater Box",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"box_number\": 101,\n  \"total_seats\": 50,\n  \"reserved_seats\": 0,\n  \"ticket_price\": 15.75\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/theater_boxes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"theater_boxes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Theater Box 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"box_number\": 102,\n  \"total_seats\": 40,\n  \"reserved_seats\": 0,\n  \"ticket_price\": 12.50\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/theater_boxes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"theater_boxes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Showtime",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"date_time\": \"2024-04-19T20:00:00Z\",\n  \"movie_id\": 1,\n  \"theater_box_id\": 101\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/showtimes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"showtimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Showtime 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "access_token",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"date_time\": \"2024-04-19T21:00:00Z\",\n  \"movie_id\": 2,\n  \"theater_box_id\": 102\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/showtimes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"showtimes"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/apis/MORGANMAZER/dragon/1.0",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
