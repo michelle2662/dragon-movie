@@ -497,7 +497,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShowtimeRequestBody'
+              $ref: '#/components/schemas/Showtime'
         required: true
       responses:
         "201":
@@ -550,7 +550,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShowtimeRequestBody'
+              $ref: '#/components/schemas/Showtime'
         required: true
       responses:
         "200":
@@ -632,49 +632,23 @@ components:
           format: float
     Showtime:
       required:
-        - date_time
-        - id
-        - movie_id
-        - theater_box_id
+      - date_time
+      - id
+      - movie
+      - theater_box
       type: object
       properties:
         id:
-          type: integer
+          type: string
           description: Unique identifier of the showtime.
-          example: 104
         date_time:
           type: string
           description: Date and time of the showtime.
           format: date-time
-          example: "2023-12-15T20:00:00Z"
-        movie_id:
-          type: integer
-          description: ID of the movie associated with the showtime.
-          example: 123
-        theater_box_id:
-          type: integer
-          description: ID of the theater box associated with the showtime.
-          example: 5
-    ShowtimeRequestBody:
-      required:
-        - date_time
-        - movie_id
-        - theater_box_id
-      type: object
-      properties:
-        date_time:
-          type: string
-          description: Date and time of the showtime.
-          format: date-time
-          example: "2023-12-15T20:00:00Z"
-        movie_id:
-          type: integer
-          description: ID of the movie associated with the showtime.
-          example: 123
-        theater_box_id:
-          type: integer
-          description: ID of the theater box associated with the showtime.
-          example: 5
+        movie:
+          $ref: '#/components/schemas/Movie'
+        theater_box:
+          $ref: '#/components/schemas/TheaterBox'
     Movie:
       type: object
       properties:
