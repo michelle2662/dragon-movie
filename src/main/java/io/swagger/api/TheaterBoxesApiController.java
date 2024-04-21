@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.jpa.TheaterBoxRepository;
 import io.swagger.model.TheaterBox;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +45,9 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 
 	private final HttpServletRequest request;
 
+	@Autowired
+	private TheaterBoxRepository theaterBoxRepository;
+
 	@org.springframework.beans.factory.annotation.Autowired
 	public TheaterBoxesApiController(ObjectMapper objectMapper, HttpServletRequest request) {
 		this.objectMapper = objectMapper;
@@ -53,50 +59,62 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 		String accept = request.getHeader("Accept");
 		if (accept != null && accept.contains("application/json")) {
 			try {
-				return new ResponseEntity<TheaterBox>(objectMapper.readValue(
-						"{\n  \"box_number\" : 0,\n  \"reserved_seats\" : 1,\n  \"ticket_price\" : 5.962134,\n  \"total_seats\" : 6\n}",
-						TheaterBox.class), HttpStatus.NOT_IMPLEMENTED);
-			} catch (IOException e) {
-				log.error("Couldn't serialize response for content type application/json", e);
-				return new ResponseEntity<TheaterBox>(HttpStatus.INTERNAL_SERVER_ERROR);
+				TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(boxNumber);
+				if (theaterBox != null) {
+					return new ResponseEntity<>(theaterBox, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				}
+			} catch (Exception e) {
+				log.error("Error retrieving theater box details", e);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-
-		return new ResponseEntity<TheaterBox>(HttpStatus.NOT_IMPLEMENTED);
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
 	public ResponseEntity<List<TheaterBox>> theaterBoxesGet() {
 		String accept = request.getHeader("Accept");
+		System.out.println("In theaterbox get");
 		if (accept != null && accept.contains("application/json")) {
 			try {
-				return new ResponseEntity<List<TheaterBox>>(objectMapper.readValue(
-						"[ {\n  \"box_number\" : 0,\n  \"reserved_seats\" : 1,\n  \"ticket_price\" : 5.962134,\n  \"total_seats\" : 6\n}, {\n  \"box_number\" : 0,\n  \"reserved_seats\" : 1,\n  \"ticket_price\" : 5.962134,\n  \"total_seats\" : 6\n} ]",
-						List.class), HttpStatus.NOT_IMPLEMENTED);
-			} catch (IOException e) {
-				log.error("Couldn't serialize response for content type application/json", e);
-				return new ResponseEntity<List<TheaterBox>>(HttpStatus.INTERNAL_SERVER_ERROR);
+				List<TheaterBox> theaterBoxes = theaterBoxRepository.findAll();
+				return new ResponseEntity<>(theaterBoxes, HttpStatus.OK);
+			} catch (Exception e) {
+				log.error("Error retrieving theater boxes", e);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-
-		return new ResponseEntity<List<TheaterBox>>(HttpStatus.NOT_IMPLEMENTED);
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 	}
+
 
 	public ResponseEntity<List<TheaterBox>> theaterBoxesPost(
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body) {
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body
+			) {
 		String accept = request.getHeader("Accept");
-		if (accept != null && accept.contains("application/json")) {
+		System.out.println("Accept"+ accept.isEmpty());
+		System.out.println("Accept"+ accept.contains("application/json"));
+
+		System.out.println("Access: " + accessToken);
+		if (accept.contains("application/json")) {
 			try {
-				return new ResponseEntity<List<TheaterBox>>(objectMapper.readValue(
-						"[ {\n  \"box_number\" : 0,\n  \"reserved_seats\" : 1,\n  \"ticket_price\" : 5.962134,\n  \"total_seats\" : 6\n}, {\n  \"box_number\" : 0,\n  \"reserved_seats\" : 1,\n  \"ticket_price\" : 5.962134,\n  \"total_seats\" : 6\n} ]",
-						List.class), HttpStatus.NOT_IMPLEMENTED);
-			} catch (IOException e) {
-				log.error("Couldn't serialize response for content type application/json", e);
-				return new ResponseEntity<List<TheaterBox>>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+				System.out.println("In here");
+
+				// Save the new theater box to the database
+				TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
+
+				// Return the newly created theater box in the response
+				List<TheaterBox> theaterBoxList = Collections.singletonList(savedTheaterBox);
+				return new ResponseEntity<>(theaterBoxList, HttpStatus.CREATED);
+			} catch (Exception e) {
+				log.error("Error creating new theater box", e);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-
-		return new ResponseEntity<List<TheaterBox>>(HttpStatus.NOT_IMPLEMENTED);
+		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 	}
 
 }
