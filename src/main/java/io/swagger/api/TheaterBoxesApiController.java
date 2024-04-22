@@ -56,8 +56,7 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 
 	public ResponseEntity<TheaterBox> theaterBoxesBoxNumberGet(
 			@Parameter(in = ParameterIn.PATH, description = "Number of the theater box to retrieve details for.", required = true, schema = @Schema()) @PathVariable("box_number") Integer boxNumber) {
-		String accept = request.getHeader("Accept");
-		if (accept != null && accept.contains("application/json")) {
+
 			try {
 				TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(boxNumber);
 				if (theaterBox != null) {
@@ -69,14 +68,11 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 				log.error("Error retrieving theater box details", e);
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
 	}
 
 	public ResponseEntity<List<TheaterBox>> theaterBoxesGet() {
-		String accept = request.getHeader("Accept");
-		System.out.println("In theaterbox get");
-		if (accept != null && accept.contains("application/json")) {
+
 			try {
 				List<TheaterBox> theaterBoxes = theaterBoxRepository.findAll();
 				return new ResponseEntity<>(theaterBoxes, HttpStatus.OK);
@@ -84,8 +80,7 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 				log.error("Error retrieving theater boxes", e);
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
 	}
 
 
@@ -93,15 +88,9 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body
 			) {
-		String accept = request.getHeader("Accept");
-		System.out.println("Accept"+ accept.isEmpty());
-		System.out.println("Accept"+ accept.contains("application/json"));
 
-		System.out.println("Access: " + accessToken);
-		if (accept.contains("application/json")) {
 			try {
 
-				System.out.println("In here");
 
 				// Save the new theater box to the database
 				TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
@@ -113,8 +102,7 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 				log.error("Error creating new theater box", e);
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		}
-		return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
 	}
 
 }
