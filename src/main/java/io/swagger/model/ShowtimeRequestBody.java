@@ -5,61 +5,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.validation.annotation.Validated;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * Showtime
+ * ShowtimeRequestBody
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
 
-@Entity
-public class Showtime {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id = null;
 
+public class ShowtimeRequestBody   {
   @JsonProperty("date_time")
   private OffsetDateTime dateTime = null;
 
-  @ManyToOne
-  @JoinColumn(name = "movie_id", referencedColumnName = "id")
-  private Movie movie;
+  @JsonProperty("movie_id")
+  private Integer movieId = null;
 
   @JsonProperty("theater_box_id")
   private Integer theaterBoxId = null;
 
-  public Showtime id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-    /**
-   * Unique identifier of the showtime.
-   * @return id
-   **/
-  @Schema(example = "104", required = true, description = "Unique identifier of the showtime.")
-      @NotNull
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Showtime dateTime(OffsetDateTime dateTime) {
+  public ShowtimeRequestBody dateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -69,9 +36,10 @@ public class Showtime {
    * @return dateTime
    **/
   @Schema(example = "2023-12-15T20:00Z", required = true, description = "Date and time of the showtime.")
-  @NotNull
-  @Valid
-  public OffsetDateTime getDateTime() {
+      @NotNull
+
+    @Valid
+    public OffsetDateTime getDateTime() {
     return dateTime;
   }
 
@@ -79,15 +47,27 @@ public class Showtime {
     this.dateTime = dateTime;
   }
 
-  public Movie getMovie() {
-    return movie;
+  public ShowtimeRequestBody movieId(Integer movieId) {
+    this.movieId = movieId;
+    return this;
   }
 
-  public void setMovie(Movie movie) {
-    this.movie = movie;
+  /**
+   * ID of the movie associated with the showtime.
+   * @return movieId
+   **/
+  @Schema(example = "123", required = true, description = "ID of the movie associated with the showtime.")
+      @NotNull
+
+    public Integer getMovieId() {
+    return movieId;
   }
 
-  public Showtime theaterBoxId(Integer theaterBoxId) {
+  public void setMovieId(Integer movieId) {
+    this.movieId = movieId;
+  }
+
+  public ShowtimeRequestBody theaterBoxId(Integer theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
     return this;
   }
@@ -97,14 +77,16 @@ public class Showtime {
    * @return theaterBoxId
    **/
   @Schema(example = "5", required = true, description = "ID of the theater box associated with the showtime.")
-  @NotNull
-  public Integer getTheaterBoxId() {
+      @NotNull
+
+    public Integer getTheaterBoxId() {
     return theaterBoxId;
   }
 
   public void setTheaterBoxId(Integer theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
   }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -114,25 +96,24 @@ public class Showtime {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Showtime showtime = (Showtime) o;
-    return Objects.equals(this.id, showtime.id) &&
-        Objects.equals(this.dateTime, showtime.dateTime) &&
-        Objects.equals(this.movie, showtime.movie) &&
-        Objects.equals(this.theaterBoxId, showtime.theaterBoxId);
+    ShowtimeRequestBody showtimeRequestBody = (ShowtimeRequestBody) o;
+    return Objects.equals(this.dateTime, showtimeRequestBody.dateTime) &&
+        Objects.equals(this.movieId, showtimeRequestBody.movieId) &&
+        Objects.equals(this.theaterBoxId, showtimeRequestBody.theaterBoxId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dateTime, movie, theaterBoxId);
+    return Objects.hash(dateTime, movieId, theaterBoxId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Showtime {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("class ShowtimeRequestBody {\n");
+    
     sb.append("    dateTime: ").append(toIndentedString(dateTime)).append("\n");
-    sb.append("    movie: ").append(toIndentedString(movie)).append("\n");
+    sb.append("    movieId: ").append(toIndentedString(movieId)).append("\n");
     sb.append("    theaterBoxId: ").append(toIndentedString(theaterBoxId)).append("\n");
     sb.append("}");
     return sb.toString();
