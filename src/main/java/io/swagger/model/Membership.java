@@ -107,4 +107,14 @@ public class Membership {
 				+ "]";
 	}
 
+    public String getRole() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRole'");
+    }
+
+    public String getPassword() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+    }
+
 }
