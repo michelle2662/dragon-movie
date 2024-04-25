@@ -30,7 +30,7 @@ public class DatabaseInitialization {
 					LocalDate.parse("2024-02-06"), new BigDecimal(8.7), true, false));
 			
 			// id = 1
-			membershipRepository.save(new Membership("Jane", "Doe", "jane.doe@email.com"));
+			membershipRepository.save(new Membership(1l, "Jane", "Doe", "jane.doe@email.com", "test123", "MEMBER"));
 		};
 	}
 

@@ -22,6 +22,9 @@ public class MembershipRequestBody {
 	@JsonProperty("email")
 	private String email = null;
 
+	@JsonProperty("password")
+	private String password = null;
+
 	public MembershipRequestBody firstName(String firstName) {
 		this.firstName = firstName;
 		return this;
@@ -81,6 +84,27 @@ public class MembershipRequestBody {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	/**
+	 * Get password
+	 * 
+	 * @return password
+	 **/
+	@Schema(example = "password", required = true, description = "")
+	@NotNull
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public MembershipRequestBody password(String password) {
+		this.password = password;
+		return this;
+	}
+
 
 	@Override
 	public boolean equals(java.lang.Object o) {

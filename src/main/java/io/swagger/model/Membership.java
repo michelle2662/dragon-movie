@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,23 +33,26 @@ public class Membership {
 	private String lastName = null;
 
 	@JsonProperty("email")
+	@Column(unique = true)
 	private String email = null;
+
+	@JsonProperty("password")
+	private String password;
+
+	@JsonProperty("role")
+    private String role;
 
 	public Membership() {
 
 	}
 
-	public Membership(Long id, String firstName, String lastName, String email) {
+	public Membership(Long id, String firstName, String lastName, String email, String password, String role) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-	}
-	
-	public Membership(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
+		this.password = password;
+		this.role = role;
 	}
 
 	public Long getId() {
@@ -89,6 +93,27 @@ public class Membership {
 		this.email = email;
 	}
 
+	@Schema(example = "password", description = "")
+	@NotNull
+	public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+	@Schema(example = "MEMBER", description = "")
+	@NotNull
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -99,28 +124,20 @@ public class Membership {
 		}
 		Membership membership = (Membership) o;
 		return Objects.equals(this.firstName, membership.firstName)
-				&& Objects.equals(this.lastName, membership.lastName) && Objects.equals(this.email, membership.email);
+				&& Objects.equals(this.lastName, membership.lastName) && Objects.equals(this.email, membership.email) && Objects.equals(this.password, membership.password) &&
+                Objects.equals(this.role, membership.role);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(firstName, lastName, email);
-	}
+		return Objects.hash(id, firstName, lastName, email, password, role);
+		}
 
 	@Override
 	public String toString() {
-		return "Membership [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+		return "Membership [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", role='" + role 
 				+ "]";
 	}
 
-    public String getRole() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRole'");
-    }
-
-    public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
 
 }
