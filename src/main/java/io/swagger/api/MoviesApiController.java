@@ -45,16 +45,15 @@ public class MoviesApiController implements MoviesApi {
 		this.request = request;
 	}
 	
-	public ResponseEntity<List<Movie>> moviesGet() {
+    public ResponseEntity<List<Movie>> moviesGet() {
         log.info("GET /movies");
         
         List<Movie> movies = movieRepository.findAll();
         return ResponseEntity.ok().body(movies);
     }
 
-	public ResponseEntity<Movie> moviesIdDelete(
-			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required = true, schema = @Schema()) @PathVariable("id") Integer id) {
+    public ResponseEntity<Movie> moviesIdDelete(@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required=true, schema=@Schema()) @PathVariable("id") Integer id
+) {
 		log.info("DELETE /movies id" + id);
 		
 		String token = request.getHeader("access_token");
@@ -83,18 +82,17 @@ public class MoviesApiController implements MoviesApi {
 		}
 	}
 
-	public ResponseEntity<Movie> moviesIdPut(
-			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required = true, schema = @Schema()) @PathVariable("id") Integer id,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated movie title", schema = @Schema()) @Valid @RequestParam(value = "title", required = false) String title,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated director", schema = @Schema()) @Valid @RequestParam(value = "director", required = false) String director,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated genre", schema = @Schema()) @Valid @RequestParam(value = "genre", required = false) String genre,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated rating", schema = @Schema()) @Valid @RequestParam(value = "rating", required = false) String rating,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated length", schema = @Schema()) @Valid @RequestParam(value = "length", required = false) String length,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated review score", schema = @Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated release date", schema = @Schema()) @Valid @RequestParam(value = "releaseDate", required = false) String releaseDate,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the movie is currently playing", schema = @Schema()) @Valid @RequestParam(value = "currentlyPlaying", required = false) Boolean currentlyPlaying,
-			@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release", schema = @Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease) {
+    public ResponseEntity<Movie> moviesIdPut(@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required=true, schema=@Schema()) @PathVariable("id") Integer id
+,@Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update" ,schema=@Schema()) @Valid @RequestParam(value = "title", required = false) String title
+,@Parameter(in = ParameterIn.QUERY, description = "the updated director" ,schema=@Schema()) @Valid @RequestParam(value = "director", required = false) String director
+,@Parameter(in = ParameterIn.QUERY, description = "the updated genre" ,schema=@Schema()) @Valid @RequestParam(value = "genre", required = false) String genre
+,@Parameter(in = ParameterIn.QUERY, description = "the updated rating" ,schema=@Schema()) @Valid @RequestParam(value = "rating", required = false) String rating
+,@Parameter(in = ParameterIn.QUERY, description = "the updated length" ,schema=@Schema()) @Valid @RequestParam(value = "length", required = false) String length
+,@Parameter(in = ParameterIn.QUERY, description = "the updated review score" ,schema=@Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore
+,@Parameter(in = ParameterIn.QUERY, description = "the updated release date" ,schema=@Schema()) @Valid @RequestParam(value = "releaseDate", required = false) String releaseDate
+,@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the movie is currently playing" ,schema=@Schema()) @Valid @RequestParam(value = "currentlyPlaying", required = false) Boolean currentlyPlaying
+,@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release" ,schema=@Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease
+) {
 		log.info("PUT /movies id" + id);
 		
 		String token = request.getHeader("access_token");
@@ -147,9 +145,8 @@ public class MoviesApiController implements MoviesApi {
 		}
 	}
 
-	public ResponseEntity<Movie> moviesPost(
-			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody MovieRequestBody body) {
+    public ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody MovieRequestBody body
+) {
 		log.info("POST /movies " + body.toString());
 		
 		String token = request.getHeader("access_token");

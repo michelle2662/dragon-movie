@@ -33,7 +33,7 @@ public class ShowtimesApiController implements ShowtimesApi {
 
     private final HttpServletRequest request;
 
-    private static final String API_PATH = "apis/MORGANMAZER/dragon/2.0/showtimes/";
+    private static final String API_PATH = "apis/MORGANMAZER/dragon/1.0/showtimes/";
 
     @Autowired
     private ShowtimeRepository showtimeRepository;
@@ -53,14 +53,9 @@ public class ShowtimesApiController implements ShowtimesApi {
         return ResponseEntity.ok().body(showtimes);
     }
 
-    public ResponseEntity<Void> showtimesPost(
-        @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-        @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
-        
+    public ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
         log.info("POST /showtimes");
-        if (accessToken == null || accessToken.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+
         Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
         if (movie.isPresent()) {
             Showtime showtime = new Showtime();
@@ -69,32 +64,25 @@ public class ShowtimesApiController implements ShowtimesApi {
             showtime.setTheaterBoxId(body.getTheaterBoxId());
 
             Showtime createdShowtime = showtimeRepository.save(showtime);
-            URI location = UriComponentsBuilder.fromPath("apis/MORGANMAZER/dragon/2.0/showtimes/" + createdShowtime.getId()).build().toUri();
+            URI location = UriComponentsBuilder.fromPath("apis/MORGANMAZER/dragon/1.0/showtimes/" + createdShowtime.getId()).build().toUri();
             return ResponseEntity.created(location).build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<Void> showtimesShowtimeIdDelete(
-            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId,
-            @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken) {
-
+    public ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
+) {
         log.info("DELETE /showtimes/{}", showtimeId);
 
-        String token = request.getHeader("access_token");
-
-        if (token != null && !token.isEmpty()) { // TODO: actual token verification
-            Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
-            if (optionalShowtime.isPresent()) {
-                showtimeRepository.delete(optionalShowtime.get());
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+        if (optionalShowtime.isPresent()) {
+            showtimeRepository.delete(optionalShowtime.get());
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.notFound().build();
         }
+
     }
 
     public ResponseEntity<Showtime> showtimesShowtimeIdGet(
@@ -114,31 +102,24 @@ public class ShowtimesApiController implements ShowtimesApi {
                 return ResponseEntity.ok(movies);
     }
 
-    public ResponseEntity<Void> showtimesShowtimeIdPut(
-            @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-            @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required = true, schema = @Schema()) @PathVariable("showtime_id") Long showtimeId,
-            @Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
-
+    public ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
+,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
+) {
         log.info("PUT /showtimes/{}", showtimeId);
 
-        String token = request.getHeader("access_token");
-        
-        if (token != null && !token.isEmpty()) { // TODO: actual token verification
-            Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
-            Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
-            if (optionalShowtime.isPresent()) {
-                Showtime showtime = optionalShowtime.get();
-                showtime.setDateTime(body.getDateTime());
-                showtime.setMovie(movie.get());
-                showtime.setTheaterBoxId(body.getTheaterBoxId());
+        Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+        Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
+        if (optionalShowtime.isPresent()) {
+            Showtime showtime = optionalShowtime.get();
+            showtime.setDateTime(body.getDateTime());
+            showtime.setMovie(movie.get());
+            showtime.setTheaterBoxId(body.getTheaterBoxId());
 
-                showtimeRepository.save(showtime);
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            showtimeRepository.save(showtime);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.notFound().build();
         }
+
     }
 }

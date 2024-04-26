@@ -18,17 +18,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    public AuthController() {
-        log.info("AuthController class initialized");
-    }
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     
     @Autowired
@@ -46,13 +44,19 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         log.info("POST /login " + loginRequest.toString());
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(token));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(token));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid email or password!" + e.getMessage());
+        }
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> createMembership(@Valid @RequestBody MembershipRequestBody membershipRequestBody) {

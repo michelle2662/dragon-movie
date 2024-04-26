@@ -35,8 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         new AntPathRequestMatcher("/membership"),
         new AntPathRequestMatcher("/theater_boxes/**"),
         //new AntPathRequestMatcher("/showtimes/**"),
-        new AntPathRequestMatcher("/login"),
-        new AntPathRequestMatcher("/register")
+        new AntPathRequestMatcher("/auth/**")
     );
 
     private static final RequestMatcher MEMBER_URLS = new OrRequestMatcher(

@@ -1,6 +1,8 @@
 package io.swagger.model;
 
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -36,7 +38,7 @@ public class Membership {
 	@Column(unique = true)
 	private String email = null;
 
-	@JsonProperty("password")
+	@JsonIgnore // This annotation prevents the password from being serialized
 	private String password;
 
 	@JsonProperty("role")
