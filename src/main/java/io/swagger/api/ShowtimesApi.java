@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import org.hibernate.internal.util.type.PrimitiveWrapperHelper.LongDescriptor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-25T21:59:48.447063-04:00[America/New_York]")
 @Validated
 public interface ShowtimesApi {
 
@@ -47,7 +49,8 @@ public interface ShowtimesApi {
     ResponseEntity<List<Showtime>> showtimesGet();
 
 
-    @Operation(summary = "Create a new showtime", description = "Allows an admin to create a new showtime.", tags={  })
+    @Operation(summary = "Create a new showtime", description = "Allows an admin to create a new showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "201", description = "Showtime successfully created."),
         
@@ -57,12 +60,12 @@ public interface ShowtimesApi {
     @RequestMapping(value = "/showtimes",
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
+    ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 );
 
 
-    @Operation(summary = "Delete a showtime", description = "Allows an admin to delete a showtime.", tags={  })
+    @Operation(summary = "Delete a showtime", description = "Allows an admin to delete a showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Showtime successfully deleted."),
         
@@ -74,7 +77,6 @@ public interface ShowtimesApi {
     @RequestMapping(value = "/showtimes/{showtime_id}",
         method = RequestMethod.DELETE)
     ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
-, @Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
 );
 
 
@@ -98,7 +100,8 @@ public interface ShowtimesApi {
 );
 
 
-    @Operation(summary = "Update a showtime", description = "Allows an admin to update a showtime.", tags={  })
+    @Operation(summary = "Update a showtime", description = "Allows an admin to update a showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Showtime successfully updated."),
         
@@ -110,8 +113,7 @@ public interface ShowtimesApi {
     @RequestMapping(value = "/showtimes/{showtime_id}",
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
+    ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 , @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 );
 
