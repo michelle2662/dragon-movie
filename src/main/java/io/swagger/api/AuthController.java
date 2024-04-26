@@ -71,7 +71,7 @@ public class AuthController {
         membership.setLastName(membershipRequestBody.getLastName());
         membership.setEmail(membershipRequestBody.getEmail());
         membership.setPassword(passwordEncoder.encode(membershipRequestBody.getPassword()));
-        membership.setRole("ROLE_ADMIN");
+        membership.setRole("ROLE_MEMBER");
 
         membershipRepository.save(membership);
 

@@ -698,11 +698,18 @@ components:
           type: string
           format: email
           example: john.smith@email.com
+        password:
+          type: string
+          example: password
+        role: 
+          type: string
+          example: ROLE_MEMBER
     MembershipRequestBody:
       required:
       - email
       - firstName
       - lastName
+      - password
       type: object
       properties:
         firstName:
@@ -715,6 +722,9 @@ components:
           type: string
           format: email
           example: john.smith@email.com
+        password:
+          type: string
+          example: password
     Reservation:
       type: object
       properties:
