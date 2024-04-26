@@ -74,6 +74,20 @@ public class Movie {
 		this.currentlyPlaying = currentlyPlaying;
 		this.upcomingRelease = upcomingRelease;
 	}
+	
+	public Movie(String title, String director, String genre, String rating, String length, LocalDate releaseDate,
+			BigDecimal reviewScore, Boolean currentlyPlaying, Boolean upcomingRelease) {
+		super();
+		this.title = title;
+		this.director = director;
+		this.genre = genre;
+		this.rating = rating;
+		this.length = length;
+		this.releaseDate = releaseDate;
+		this.reviewScore = reviewScore;
+		this.currentlyPlaying = currentlyPlaying;
+		this.upcomingRelease = upcomingRelease;
+	}
 
 	public Long getId() {
 		return id;
