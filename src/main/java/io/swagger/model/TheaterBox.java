@@ -19,7 +19,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 
-//@Entity
+@Entity
 public class TheaterBox {
 	
 	@Id
