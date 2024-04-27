@@ -682,20 +682,20 @@ paths:
       security:
       - bearerAuth: []
       parameters:
-      - name: startDate
+      - name: start_date_time
         in: query
         description: Start date of the report period.
         required: true
         schema:
           type: string
-          format: date
-      - name: endDate
+          format: date-time
+      - name: end_date_time
         in: query
         description: End date of the report period.
         required: true
         schema:
           type: string
-          format: date
+          format: date-time
       responses:
         "200":
           description: Summary report retrieved successfully.
