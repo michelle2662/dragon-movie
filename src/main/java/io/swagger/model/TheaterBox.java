@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +24,11 @@ import javax.validation.constraints.*;
 public class TheaterBox {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty("box_number")
-	private Integer boxNumber = null;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = null;
+	
+	@Column(unique = true)
+    private Integer boxNumber = null;
 
 	@JsonProperty("total_seats")
 	private Integer totalSeats = null;
@@ -38,6 +41,19 @@ public class TheaterBox {
 
 	public TheaterBox boxNumber(Integer boxNumber) {
 		this.boxNumber = boxNumber;
+		return this;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public TheaterBox id(Long id) {
+		this.id = id;
 		return this;
 	}
 

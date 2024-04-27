@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -28,11 +30,16 @@ public class Reservation {
 	@JsonProperty("id")
 	private Long id = null;
 
-	@JsonProperty("showtime_id")
+	@ManyToOne
+    @JoinColumn(name = "showtime_id", referencedColumnName = "id")
 	private Long showtimeId = null;
 	
-	@JsonProperty("theater_box")
-	private TheaterBox theaterBox = null;
+	@ManyToOne
+    @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
+    private TheaterBox theaterBox = null;
+
+	@JsonProperty("seatsReserved")
+	private Integer seatsReserved = null;
 
 	@Schema(description = "Identifier for reservation")
 	public Long getId() {
@@ -71,6 +78,20 @@ public class Reservation {
 		this.theaterBox = theaterBox;
 	}
 
+	@Schema(description = "Number of seats reserved")
+	public Integer getSeatsReserved() {
+		return seatsReserved;
+	}
+
+	public void setSeatsReserved(Integer seatsReserved) {
+		this.seatsReserved = seatsReserved;
+	}
+
+	public Reservation seatsReserved(Integer seatsReserved) {
+		this.seatsReserved = seatsReserved;
+		return this;
+	}
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -81,17 +102,17 @@ public class Reservation {
 		}
 		Reservation reservation = (Reservation) o;
 		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtimeId, reservation.showtimeId)
-				&& Objects.equals(this.theaterBox, reservation.theaterBox);
+				&& Objects.equals(this.theaterBox, reservation.theaterBox) && Objects.equals(this.seatsReserved, reservation.seatsReserved);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, showtimeId, theaterBox);
+		return Objects.hash(id, showtimeId, theaterBox, seatsReserved);
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", showtimeId=" + showtimeId + ", theaterBoxNumber=" + theaterBox + "]";
+		return "Reservation [id=" + id + ", showtimeId=" + showtimeId + ", theaterBoxNumber=" + theaterBox + ", seatsReserved=" + seatsReserved + "]";
 	}
 
 }

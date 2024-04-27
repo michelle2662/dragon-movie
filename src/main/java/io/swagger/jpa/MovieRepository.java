@@ -7,5 +7,5 @@ import io.swagger.model.Movie;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-
+    
 }
