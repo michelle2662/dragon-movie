@@ -6,7 +6,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.LocalDateTime;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.validation.annotation.Validated;
 
@@ -33,7 +33,7 @@ public class Showtime {
   private Long id = null;
 
   @JsonProperty("date_time")
-  private OffsetDateTime dateTime = null;
+  private LocalDateTime dateTime = null;
 
   @ManyToOne
   @JoinColumn(name = "movie_id", referencedColumnName = "id")
@@ -65,7 +65,7 @@ public class Showtime {
     this.id = id;
   }
 
-  public Showtime dateTime(OffsetDateTime dateTime) {
+  public Showtime dateTime(LocalDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -77,11 +77,11 @@ public class Showtime {
   @Schema(example = "2023-12-15T20:00Z", required = true, description = "Date and time of the showtime.")
   @NotNull
   @Valid
-  public OffsetDateTime getDateTime() {
+  public LocalDateTime getDateTime() {
     return dateTime;
   }
 
-  public void setDateTime(OffsetDateTime dateTime) {
+  public void setDateTime(LocalDateTime dateTime) {
     this.dateTime = dateTime;
   }
 

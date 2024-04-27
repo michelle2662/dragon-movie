@@ -4,7 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.LocalDateTime;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 
 public class ShowtimeRequestBody   {
   @JsonProperty("date_time")
-  private OffsetDateTime dateTime = null;
+  private LocalDateTime dateTime = null;
 
   @JsonProperty("movie_id")
   private Integer movieId = null;
@@ -26,7 +26,7 @@ public class ShowtimeRequestBody   {
   @JsonProperty("theater_box_id")
   private Integer theaterBoxId = null;
 
-  public ShowtimeRequestBody dateTime(OffsetDateTime dateTime) {
+  public ShowtimeRequestBody dateTime(LocalDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -39,11 +39,11 @@ public class ShowtimeRequestBody   {
       @NotNull
 
     @Valid
-    public OffsetDateTime getDateTime() {
+    public LocalDateTime getDateTime() {
     return dateTime;
   }
 
-  public void setDateTime(OffsetDateTime dateTime) {
+  public void setDateTime(LocalDateTime dateTime) {
     this.dateTime = dateTime;
   }
 

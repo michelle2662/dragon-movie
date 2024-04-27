@@ -39,10 +39,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-//import java.time.OffsetDateTime;
+
 import java.util.List;
 import java.util.Map;
-import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.LocalDateTime;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 @RestController
@@ -84,7 +84,7 @@ public class ReservationApiController implements ReservationApi {
 					Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
 					if (optionalShowtime.isPresent()) {
 						Showtime showtime = optionalShowtime.get();
-						if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
+						if (showtime.getDateTime().isBefore(LocalDateTime.now())) {
 							return ResponseEntity.status(HttpStatus.CONFLICT).build();
 						}
 					} else {
@@ -119,7 +119,7 @@ public class ReservationApiController implements ReservationApi {
 					Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
 					if (optionalShowtime.isPresent()) {
 						Showtime showtime = optionalShowtime.get();
-						if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
+						if (showtime.getDateTime().isBefore(LocalDateTime.now())) {
 							return ResponseEntity.status(HttpStatus.CONFLICT).build();
 						}
 					} else {

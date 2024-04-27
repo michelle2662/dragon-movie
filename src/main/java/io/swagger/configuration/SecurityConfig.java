@@ -50,7 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         new AntPathRequestMatcher("/theater_boxes", HttpMethod.POST.name()),
         new AntPathRequestMatcher("/showtimes", HttpMethod.POST.name()),
         new AntPathRequestMatcher("/showtimes/*", HttpMethod.PUT.name()),
-        new AntPathRequestMatcher("/showtimes/*", HttpMethod.DELETE.name())
+        new AntPathRequestMatcher("/showtimes/*", HttpMethod.DELETE.name()),
+        new AntPathRequestMatcher("/reservation/**"),
+        new AntPathRequestMatcher("/reports/summary", HttpMethod.GET.name())
     );
 
     @Autowired
@@ -68,8 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
             .requestMatchers(PUBLIC_URLS).permitAll()
-            .requestMatchers(MEMBER_URLS).hasRole("MEMBER")
             .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
+            .requestMatchers(MEMBER_URLS).hasRole("MEMBER")
             .anyRequest().authenticated()
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
