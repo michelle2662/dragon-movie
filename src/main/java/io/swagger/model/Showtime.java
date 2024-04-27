@@ -15,6 +15,7 @@ import org.threeten.bp.LocalDateTime;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -50,7 +51,7 @@ public class Showtime {
   @JsonBackReference
   private TheaterBox theaterBox = null;
 
-  @OneToMany(mappedBy = "showtime")
+  @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private Set<Reservation> reservations;
 

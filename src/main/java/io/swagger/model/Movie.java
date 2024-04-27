@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -60,7 +61,7 @@ public class Movie {
 	@JsonProperty("upcomingRelease")
 	private Boolean upcomingRelease = null;
 
-	@OneToMany(mappedBy = "movie")
+	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private Set<Showtime> showtimes;
 

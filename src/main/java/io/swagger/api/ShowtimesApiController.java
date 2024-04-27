@@ -63,7 +63,7 @@ public class ShowtimesApiController implements ShowtimesApi {
 
         Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
         Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
-        if (movie.isPresent()) {
+        if (movie.isPresent() && theaterBox.isPresent()) {
             Showtime showtime = new Showtime();
             showtime.setDateTime(body.getDateTime());
             showtime.setMovie(movie.get());

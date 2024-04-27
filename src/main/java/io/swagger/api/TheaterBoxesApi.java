@@ -55,19 +55,17 @@ public interface TheaterBoxesApi {
     ResponseEntity<List<TheaterBox>> theaterBoxesGet();
 
 
-    @Operation(summary = "Create a new theater box", description = "Allows an admin to create a new theater box.", tags={  })
+    @Operation(summary = "Create a new theater box", description = "Allows an admin to create a new theater box.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "201", description = "Theater box successfully created.", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TheaterBox.class)))),
-        
         @ApiResponse(responseCode = "401", description = "Unauthorized. Admin access token is invalid."),
-        
         @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
     @RequestMapping(value = "/theater_boxes",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<List<TheaterBox>> theaterBoxesPost(@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
+    ResponseEntity<List<TheaterBox>> theaterBoxesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
 );
 
 }
