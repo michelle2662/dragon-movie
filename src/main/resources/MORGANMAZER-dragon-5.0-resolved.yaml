@@ -1,0 +1,916 @@
+---
+openapi: 3.0.0
+info:
+  title: Dragon Movie
+  description: Dragon Movie project
+  version: "5.0"
+servers:
+- url: https://app.swaggerhub.com/api/dragon/5.0/
+  description: SwaggerHub API Auto Mocking
+paths:
+  /movies:
+    get:
+      summary: Get all movies
+      description: Get details of all movies with optional filtering
+      parameters:
+        - name: rating
+          in: query
+          description: Filter movies by rating
+          schema:
+            type: string
+        - name: genre
+          in: query
+          description: Filter movies by genre
+          schema:
+            type: string
+        - name: title
+          in: query
+          description: Filter movies by title
+          schema:
+            type: string
+        - name: length
+          in: query
+          description: Filter movies by length
+          schema:
+            type: string
+        - name: releaseDate
+          in: query
+          description: Filter movies by release date
+          schema:
+            type: string
+            format: date
+        - name: director
+          in: query
+          description: Filter movies by director
+          schema:
+            type: string
+        - name: reviewScore
+          in: query
+          description: Filter movies by review score
+          schema:
+            type: number
+            format: float
+      responses:
+        "200":
+          description: A list of movies matching the filter criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+    post:
+      summary: Create a movie
+      description: Allows an admin to create a movie
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieRequestBody'
+        required: true
+      responses:
+        "201":
+          description: successfully created movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /movies/{id}:
+    get:
+      summary: Retrieve details about a movie
+      description: Returns details about a specific movie
+      parameters:
+      - name: id
+        in: path
+        description: the id of the movie to get details about
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 123
+      responses:
+        "200":
+          description: successfully retrieved movie details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+    put:
+      summary: Update a movie
+      description: Allows an admin to update a movie
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: the id of the movie to update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 123
+      - name: title
+        in: query
+        description: the title of the movie to update
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Skyfall
+      - name: director
+        in: query
+        description: the updated director
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Sam Mendes
+      - name: genre
+        in: query
+        description: the updated genre
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Action
+      - name: rating
+        in: query
+        description: the updated rating
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: PG-13
+      - name: length
+        in: query
+        description: the updated length
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2h23m
+      - name: reviewScore
+        in: query
+        description: the updated review score
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          example: 7.8
+      - name: releaseDate
+        in: query
+        description: the updated release date
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2012-10-26
+      - name: currentlyPlaying
+        in: query
+        description: the updated value for if the movie is currently playing
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          example: false
+      - name: upcomingRelease
+        in: query
+        description: the updated value for if the move is an upcoming release
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          example: false
+      responses:
+        "200":
+          description: successfully updated movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+    delete:
+      summary: Delete a movie
+      description: Allows an admin to delete a movie
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: the id of the movie to delete
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 123
+      responses:
+        "200":
+          description: successfully deleted movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /movies/{id}/showtimes:
+    get:
+      summary: Get showtimes for a specific movie
+      description: Returns a list of showtimes for a specific movie.
+      parameters:
+      - name: id
+        in: path
+        description: ID of the movie to retrieve showtimes for.
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: A list of showtimes for the specified movie.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Showtime'
+  /movies/{id}/currentlyPlaying:
+    put:
+      summary: Set a movie's currently playing status
+      description: Allows an admin to set a movie's currently playing status.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the movie to update the currently playing status for.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentlyPlaying:
+                  type: boolean
+        required: true
+      responses:
+        "200":
+          description: Movie's currently playing status updated successfully.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /membership:
+    post:
+      summary: Create a membership
+      description: Create a new membership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MembershipRequestBody'
+        required: true
+      responses:
+        "201":
+          description: successfully created membership
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+  /membership/{id}:
+    get:
+      summary: Get details of a membership
+      description: Returns details of a specific membership
+      parameters:
+      - name: id
+        in: path
+        description: the id of the membership
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          example: 11
+      responses:
+        "200":
+          description: successfully retrieved membership details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Membership'
+  /theater_boxes:
+    get:
+      summary: Get details of all theater boxes
+      description: Returns details of all theater boxes.
+      responses:
+        "200":
+          description: A list of theater boxes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TheaterBox'
+    post:
+      summary: Create a new theater box
+      description: Allows an admin to create a new theater box.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TheaterBox'
+        required: true
+      responses:
+        "201":
+          description: Theater box successfully created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TheaterBox'
+        "401":
+          description: Unauthorized. Admin access token is invalid.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /theater_boxes/{box_number}:
+    get:
+      summary: Get details about a specific theater box
+      description: Returns details about a specific theater box.
+      parameters:
+      - name: box_number
+        in: path
+        description: Number of the theater box to retrieve details for.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Details about the theater box.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TheaterBox'
+  /theater_boxes/{id}:
+    put:
+      summary: Update a theater box
+      description: Allows an admin to update a theater box.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the theater box to update.
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TheaterBox'
+        required: true
+      responses:
+        "200":
+          description: Theater box updated successfully.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+    delete:
+      summary: Delete a theater box
+      description: Allows an admin to delete a theater box.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: ID of the theater box to delete.
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: Theater box deleted successfully.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /reservation/reserve:
+    post:
+      summary: Reserve seats for a given showtime
+      description: Allows a member to reserve one or more seats for a given showtime.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: theater_box
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/TheaterBox'
+      - name: showtime_id
+        in: query
+        description: ID of the showtime.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reservation_reserve_body'
+        required: true
+      responses:
+        "200":
+          description: Seats successfully reserved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        "400":
+          description: Bad request. Invalid number of seats requested or seats not available.
+        "401":
+          description: Unauthorized. Member access token is invalid.
+        "404":
+          description: Not found. Theater box or showtime not found.
+        "409":
+          description: Conflict. Requested number of seats not available.
+  /reservation/cancel:
+    delete:
+      summary: Cancel reservation for a given showtime
+      description: Allows a member to cancel their reservation for a given showtime.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: theater_box
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/TheaterBox'
+      - name: showtime_id
+        in: query
+        description: ID of the showtime.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: reservation_id
+        in: query
+        description: ID of the reservation to cancel.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Reservation successfully canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        "401":
+          description: Unauthorized. Member access token is invalid.
+        "404":
+          description: "Not found. Theater box, showtime, or reservation not found."
+        "409":
+          description: Conflict. Showtime has already occurred.
+  /reservation/modify:
+    put:
+      summary: Modify reservation for a given showtime
+      description: Allows a member to modify their reservation for a given showtime.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: theater_box
+        in: query
+        description: Number of the theater box.
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/TheaterBox'
+      - name: showtime_id
+        in: query
+        description: ID of the showtime.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: reservation_id
+        in: query
+        description: ID of the reservation to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reservation_modify_body'
+        required: true
+      responses:
+        "200":
+          description: Reservation successfully modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        "400":
+          description: Bad request. Invalid number of seats requested or seats not available.
+        "401":
+          description: Unauthorized. Member access token is invalid.
+        "404":
+          description: "Not found. Theater box, showtime, or reservation not found."
+        "409":
+          description: Conflict. Requested number of seats not available for the given showtime.
+  /showtimes:
+    get:
+      summary: Get all showtimes
+      description: Returns a list of all showtimes.
+      responses:
+        "200":
+          description: A list of showtimes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Showtime'
+    post:
+      summary: Create a new showtime
+      description: Allows an admin to create a new showtime.
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShowtimeRequestBody'
+        required: true
+      responses:
+        "201":
+          description: Showtime successfully created.
+        "401":
+          description: Unauthorized. Admin access token is invalid.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+  /showtimes/{showtime_id}:
+    get:
+      summary: Get details about a specific showtime
+      description: Returns details about a specific showtime.
+      parameters:
+      - name: showtime_id
+        in: path
+        description: ID of the showtime to retrieve details for.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Details about the showtime.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Showtime'
+    put:
+      summary: Update a showtime
+      description: Allows an admin to update a showtime.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: showtime_id
+        in: path
+        description: ID of the showtime to update.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShowtimeRequestBody'
+        required: true
+      responses:
+        "200":
+          description: Showtime successfully updated.
+        "401":
+          description: Unauthorized. Admin access token is invalid.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+        "404":
+          description: Not found. Showtime not found.
+    delete:
+      summary: Delete a showtime
+      description: Allows an admin to delete a showtime.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: showtime_id
+        in: path
+        description: ID of the showtime to delete.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Showtime successfully deleted.
+        "401":
+          description: Unauthorized. Admin access token is invalid.
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+        "404":
+          description: Not found. Showtime not found.
+  /showtimes/{showtime_id}/movies:
+    get:
+      summary: Get movies for a specific showtime
+      description: Returns a list of movies playing at a specific showtime.
+      parameters:
+      - name: showtime_id
+        in: path
+        description: ID of the showtime to retrieve movies for.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: A list of movies playing at the showtime.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+  /reports/summary:
+    get:
+      summary: Get summary report
+      description: Allows an admin to retrieve a summary report of total revenue per movie.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: startDate
+        in: query
+        description: Start date of the report period.
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        description: End date of the report period.
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: Summary report retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: number
+        "403":
+          description: Forbidden. Only admins are allowed to perform this action.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    TheaterBox:
+      type: object
+      properties:
+        box_number:
+          type: integer
+          description: Number of the theater box.
+        total_seats:
+          type: integer
+          description: Total number of seats in the theater box.
+        reserved_seats:
+          type: integer
+          description: Number of reserved seats in the theater box.
+        ticket_price:
+          type: number
+          description: Price of a ticket for the theater box.
+          format: float
+    Showtime:
+      required:
+        - date_time
+        - id
+        - movie_id
+        - theater_box_id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the showtime.
+          example: 104
+        date_time:
+          type: string
+          description: Date and time of the showtime.
+          format: date-time
+          example: "2023-12-15T20:00:00Z"
+        movie_id:
+          type: integer
+          description: ID of the movie associated with the showtime.
+          example: 123
+        theater_box_id:
+          type: integer
+          description: ID of the theater box associated with the showtime.
+          example: 5
+    ShowtimeRequestBody:
+      required:
+        - date_time
+        - movie_id
+        - theater_box_id
+      type: object
+      properties:
+        date_time:
+          type: string
+          description: Date and time of the showtime.
+          format: date-time
+          example: "2023-12-15T20:00:00Z"
+        movie_id:
+          type: integer
+          description: ID of the movie associated with the showtime.
+          example: 123
+        theater_box_id:
+          type: integer
+          description: ID of the theater box associated with the showtime.
+          example: 5
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        title:
+          type: string
+          example: Oppenheimer
+        director:
+          type: string
+          example: Christopher Nolan
+        genre:
+          type: string
+          example: Thriller
+        rating:
+          type: string
+          example: R
+        length:
+          type: string
+          example: 3h5m
+        releaseDate:
+          type: string
+          format: date
+          example: 2023-07-21
+        reviewScore:
+          type: number
+          example: 8.9
+        currentlyPlaying:
+          type: boolean
+          example: true
+        upcomingRelease:
+          type: boolean
+          example: false
+    MovieRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Oppenheimer
+        director:
+          type: string
+          example: Christopher Nolan
+        genre:
+          type: string
+          example: Thriller
+        rating:
+          type: string
+          example: R
+        length:
+          type: string
+          example: 3h5m
+        releaseDate:
+          type: string
+          format: date
+          example: 2023-07-21
+        reviewScore:
+          type: number
+          example: 8.9
+        currentlyPlaying:
+          type: boolean
+          example: true
+        upcomingRelease:
+          type: boolean
+          example: false
+    Membership:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 34
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Smith
+        email:
+          type: string
+          format: email
+          example: john.smith@email.com
+        password:
+          type: string
+          example: password
+        role: 
+          type: string
+          example: ROLE_MEMBER
+    MembershipRequestBody:
+      required:
+      - email
+      - firstName
+      - lastName
+      - password
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Smith
+        email:
+          type: string
+          format: email
+          example: john.smith@email.com
+        password:
+          type: string
+          example: password
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifier for reservation
+        showtime_id:
+          type: integer
+          description: Identifier of the showtime associated with the reservation
+          allOf:
+          - $ref: '#/components/schemas/Showtime/properties/id'
+        theater_box:
+          $ref: '#/components/schemas/TheaterBox'
+    reservation_reserve_body:
+      required:
+      - seats
+      type: object
+      properties:
+        seats:
+          minimum: 1
+          type: integer
+          description: Number of seats to reserve.
+    reservation_modify_body:
+      required:
+      - seats
+      type: object
+      properties:
+        seats:
+          minimum: 1
+          type: integer
+          description: New number of seats for the reservation.

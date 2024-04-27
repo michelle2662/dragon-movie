@@ -2,6 +2,7 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.TheaterBox;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -20,7 +23,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 
-//@Entity
+@Entity
 public class Reservation {
 	
 	@Id
@@ -28,11 +31,29 @@ public class Reservation {
 	@JsonProperty("id")
 	private Long id = null;
 
-	@JsonProperty("showtime_id")
-	private Long showtimeId = null;
+	@ManyToOne
+	@JsonBackReference
+    @JoinColumn(name = "showtime_id", referencedColumnName = "id")
+	private Showtime showtime = null;
 	
-	@JsonProperty("theater_box")
-	private TheaterBox theaterBox = null;
+	@ManyToOne
+	@JsonBackReference
+    @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
+    private TheaterBox theaterBox = null;
+
+	@JsonProperty("seatsReserved")
+	private Integer seatsReserved = null;
+
+	public Reservation() {
+
+	}
+
+	public Reservation(Long id, Showtime showtime, TheaterBox theaterBox, Integer seatsReserved) {
+		this.id = id;
+		this.showtime = showtime;
+		this.theaterBox = theaterBox;
+		this.seatsReserved = seatsReserved;
+	}
 
 	@Schema(description = "Identifier for reservation")
 	public Long getId() {
@@ -43,17 +64,17 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public Reservation showtimeId(Long showtimeId) {
-		this.showtimeId = showtimeId;
+	public Reservation showtimeId(Showtime showtime) {
+		this.showtime = showtime;
 		return this;
 	}
 
-	public Long getShowtimeId() {
-		return showtimeId;
+	public Showtime getShowtime() {
+		return showtime;
 	}
 
-	public void setShowtimeId(Long showtimeId) {
-		this.showtimeId = showtimeId;
+	public void setShowtime(Showtime showtime) {
+		this.showtime = showtime;
 	}
 
 	public Reservation theaterBox(TheaterBox theaterBox) {
@@ -71,6 +92,20 @@ public class Reservation {
 		this.theaterBox = theaterBox;
 	}
 
+	@Schema(description = "Number of seats reserved")
+	public Integer getSeatsReserved() {
+		return seatsReserved;
+	}
+
+	public void setSeatsReserved(Integer seatsReserved) {
+		this.seatsReserved = seatsReserved;
+	}
+
+	public Reservation seatsReserved(Integer seatsReserved) {
+		this.seatsReserved = seatsReserved;
+		return this;
+	}
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -80,18 +115,18 @@ public class Reservation {
 			return false;
 		}
 		Reservation reservation = (Reservation) o;
-		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtimeId, reservation.showtimeId)
-				&& Objects.equals(this.theaterBox, reservation.theaterBox);
+		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtime, reservation.showtime)
+				&& Objects.equals(this.theaterBox, reservation.theaterBox) && Objects.equals(this.seatsReserved, reservation.seatsReserved);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, showtimeId, theaterBox);
+		return Objects.hash(id, showtime, theaterBox, seatsReserved);
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", showtimeId=" + showtimeId + ", theaterBoxNumber=" + theaterBox + "]";
+		return "Reservation [id=" + id + ", showtime=" + showtime+ ", theaterBoxNumber=" + theaterBox + ", seatsReserved=" + seatsReserved + "]";
 	}
 
 }

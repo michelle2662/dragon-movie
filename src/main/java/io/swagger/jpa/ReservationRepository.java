@@ -1,11 +1,9 @@
-package repos;
+package io.swagger.jpa;
 
+import io.swagger.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import io.swagger.model.Reservation;
-
-//@Repository
+@Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
 }

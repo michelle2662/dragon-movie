@@ -52,20 +52,13 @@ public class MoviesApiController implements MoviesApi {
         return ResponseEntity.ok().body(movies);
     }
 
-    public ResponseEntity<Movie> moviesIdDelete(@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required=true, schema=@Schema()) @PathVariable("id") Integer id
-) {
+	public ResponseEntity<Movie> moviesIdDelete(
+			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required = true, schema = @Schema()) @PathVariable("id") Integer id) {
 		log.info("DELETE /movies id" + id);
-		
-		String token = request.getHeader("access_token");
-		
-		if (token != null && !token.isEmpty()) { // TODO: actual token verification
-			// delete the given movie
-			movieRepository.deleteById((long) id);
-			
-			return ResponseEntity.ok().build();
-		} else {
-			return new ResponseEntity<Movie>(HttpStatus.FORBIDDEN);
-		}
+		// delete the given movie
+		movieRepository.deleteById((long) id);
+
+		return ResponseEntity.ok().build();
 	}
 
 	public ResponseEntity<Movie> moviesIdGet(
@@ -94,90 +87,80 @@ public class MoviesApiController implements MoviesApi {
 ,@Parameter(in = ParameterIn.QUERY, description = "the updated value for if the move is an upcoming release" ,schema=@Schema()) @Valid @RequestParam(value = "upcomingRelease", required = false) Boolean upcomingRelease
 ) {
 		log.info("PUT /movies id" + id);
-		
-		String token = request.getHeader("access_token");
-		
-		if (token != null && !token.isEmpty()) { // TODO: actual token verification
-			// get the movie to update
-			Optional<Movie> optionalMovie = movieRepository.findById((long) id);
-			if (optionalMovie.isPresent()) {
-				Movie toUpdate = optionalMovie.get();
-				
-				// update the provided attributes
-				if (title != null) {
-					toUpdate.setTitle(title);
-				}
-				if (director != null) {
-					toUpdate.setDirector(director);
-				}
-				if (genre != null) {
-					toUpdate.setGenre(genre);
-				}
-				if (rating != null) {
-					toUpdate.setRating(rating);
-				}
-				if (length != null) {
-					toUpdate.setLength(length);
-				}
-				if (reviewScore != null) {
-					toUpdate.setReviewScore(reviewScore);
-				}
-				if (releaseDate != null) {
-					toUpdate.setReleaseDate(LocalDate.parse(releaseDate));
-				}
-				if (currentlyPlaying != null) {
-					toUpdate.setCurrentlyPlaying(currentlyPlaying);
-				}
-				if (upcomingRelease != null) {
-					toUpdate.setUpcomingRelease(upcomingRelease);
-				}
-				
-				// save the updated movie
-				movieRepository.save(toUpdate);
-				
-				// return the updated movie
-				return ResponseEntity.ok().body(toUpdate);
-			} else {
-				return ResponseEntity.ok().build();
+
+		// get the movie to update
+		Optional<Movie> optionalMovie = movieRepository.findById((long) id);
+		if (optionalMovie.isPresent()) {
+			Movie toUpdate = optionalMovie.get();
+
+			// update the provided attributes
+			if (title != null) {
+				toUpdate.setTitle(title);
 			}
+			if (director != null) {
+				toUpdate.setDirector(director);
+			}
+			if (genre != null) {
+				toUpdate.setGenre(genre);
+			}
+			if (rating != null) {
+				toUpdate.setRating(rating);
+			}
+			if (length != null) {
+				toUpdate.setLength(length);
+			}
+			if (reviewScore != null) {
+				toUpdate.setReviewScore(reviewScore);
+			}
+			if (releaseDate != null) {
+				toUpdate.setReleaseDate(LocalDate.parse(releaseDate));
+			}
+			if (currentlyPlaying != null) {
+				toUpdate.setCurrentlyPlaying(currentlyPlaying);
+			}
+			if (upcomingRelease != null) {
+				toUpdate.setUpcomingRelease(upcomingRelease);
+			}
+
+			// save the updated movie
+			movieRepository.save(toUpdate);
+
+			// return the updated movie
+			return ResponseEntity.ok().body(toUpdate);
 		} else {
-			return new ResponseEntity<Movie>(HttpStatus.FORBIDDEN);
+			return ResponseEntity.ok().build();
 		}
+
 	}
 
     public ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody MovieRequestBody body
 ) {
 		log.info("POST /movies " + body.toString());
-		
-		String token = request.getHeader("access_token");
-		
-		if (token != null && !token.isEmpty()) { // TODO: actual token verification
-			// convert MovieRequestBody to Movie
-			Movie movie = new Movie();
-			movie.setTitle(body.getTitle());
-			movie.setDirector(body.getDirector());
-			movie.setGenre(body.getGenre());
-			movie.setRating(body.getRating());
-			movie.setLength(body.getLength());
-			movie.setRating(body.getRating());
-			movie.setReleaseDate(body.getReleaseDate());
-			movie.setCurrentlyPlaying(body.isCurrentlyPlaying());
-			movie.setUpcomingRelease(body.isUpcomingRelease());
-			
-			// save the movie
-			movieRepository.save(movie);
-			
-			// build URI for newly-created movie
-			String host = System.getProperty("host", "localhost");
-			String port = System.getProperty("port", "8080");
-			String baseUrl = "http://{host}:{port}/" + API_PATH + "movies/";
-			
-			URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(movie.getId());
-			
-			return ResponseEntity.created(uri).body(movie);
-		} else {
-			return new ResponseEntity<Movie>(HttpStatus.FORBIDDEN);
-		}
+
+		// convert MovieRequestBody to Movie
+		Movie movie = new Movie();
+		movie.setTitle(body.getTitle());
+		movie.setDirector(body.getDirector());
+		movie.setGenre(body.getGenre());
+		movie.setRating(body.getRating());
+		movie.setLength(body.getLength());
+		movie.setRating(body.getRating());
+		movie.setReleaseDate(body.getReleaseDate());
+		movie.setCurrentlyPlaying(body.isCurrentlyPlaying());
+		movie.setUpcomingRelease(body.isUpcomingRelease());
+
+		// save the movie
+		movieRepository.save(movie);
+
+		// build URI for newly-created movie
+		String host = System.getProperty("host", "localhost");
+		String port = System.getProperty("port", "8080");
+		String baseUrl = "http://{host}:{port}/" + API_PATH + "movies/";
+
+		URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl).host(host).port(port).path("{id}").build(movie.getId());
+
+		return ResponseEntity.created(uri).body(movie);
+
 	}
 
 }

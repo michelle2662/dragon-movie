@@ -1,16 +1,21 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -55,6 +60,10 @@ public class Movie {
 
 	@JsonProperty("upcomingRelease")
 	private Boolean upcomingRelease = null;
+
+	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	private Set<Showtime> showtimes;
 
 	public Movie() {
 		
@@ -180,6 +189,14 @@ public class Movie {
 
 	public void setUpcomingRelease(Boolean upcomingRelease) {
 		this.upcomingRelease = upcomingRelease;
+	}
+
+	public Set<Showtime> getShowtimes() {
+		return showtimes;
+	}
+
+	public void setShowtimes(Set<Showtime> showtimes) {
+		this.showtimes = showtimes;
 	}
 
 	@Override

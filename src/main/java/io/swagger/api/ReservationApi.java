@@ -35,11 +35,12 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-25T21:59:48.447063-04:00[America/New_York]")
 @Validated
 public interface ReservationApi {
 
-    @Operation(summary = "Cancel reservation for a given showtime", description = "Allows a member to cancel their reservation for a given showtime.", tags={  })
+    @Operation(summary = "Cancel reservation for a given showtime", description = "Allows a member to cancel their reservation for a given showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Reservation successfully canceled.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Reservation.class))),
         
@@ -51,14 +52,14 @@ public interface ReservationApi {
     @RequestMapping(value = "/reservation/cancel",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<Reservation> reservationCancelDelete(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) TheaterBox theaterBox
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) String showtimeId
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to cancel." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) String reservationId
-, @Parameter(in = ParameterIn.HEADER, description = "Member's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
+    ResponseEntity<Reservation> reservationCancelDelete(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box_id", required = true) Long theaterBoxId
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to cancel." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
 );
 
 
-    @Operation(summary = "Modify reservation for a given showtime", description = "Allows a member to modify their reservation for a given showtime.", tags={  })
+    @Operation(summary = "Modify reservation for a given showtime", description = "Allows a member to modify their reservation for a given showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Reservation successfully modified.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Reservation.class))),
         
@@ -73,15 +74,15 @@ public interface ReservationApi {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    ResponseEntity<Reservation> reservationModifyPut(@Parameter(in = ParameterIn.HEADER, description = "Member's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "Number of the theater box." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) TheaterBox theaterBox
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) String showtimeId
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to modify." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) String reservationId
+    ResponseEntity<Reservation> reservationModifyPut(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Number of the theater box." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box_id", required = true) Long theaterBoxId
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to modify." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
 , @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationModifyBody body
 );
 
 
-    @Operation(summary = "Reserve seats for a given showtime", description = "Allows a member to reserve one or more seats for a given showtime.", tags={  })
+    @Operation(summary = "Reserve seats for a given showtime", description = "Allows a member to reserve one or more seats for a given showtime.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "Seats successfully reserved.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Reservation.class))),
         
@@ -96,9 +97,8 @@ public interface ReservationApi {
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Reservation> reservationReservePost(@Parameter(in = ParameterIn.HEADER, description = "Member's access token for authorization." ,required=true,schema=@Schema()) @RequestHeader(value="access_token", required=true) String accessToken
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) TheaterBox theaterBox
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) String showtimeId
+    ResponseEntity<Reservation> reservationReservePost(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box_id", required = true) Long theaterBoxId
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
 , @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationReserveBody body
 );
 

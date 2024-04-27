@@ -1,272 +1,813 @@
 {
 	"info": {
-		"_postman_id": "2066e9a6-32d9-4121-aae2-d1122d5273a0",
+		"_postman_id": "f2d73b19-f610-4286-b2b8-0d2df32260cc",
 		"name": "Dragon Movie API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33974804"
 	},
 	"item": [
 		{
-			"name": "Add Movie - Oppenheimer",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Get all movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/movies?rating=PG-13&genre=Action&title=Dune&length=2h46m&releaseDate=2024-02-06&director=Denis%20Villeneuve&reviewScore=8.7",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "rating",
+									"value": "PG-13"
+								},
+								{
+									"key": "genre",
+									"value": "Action"
+								},
+								{
+									"key": "title",
+									"value": "Dune"
+								},
+								{
+									"key": "length",
+									"value": "2h46m"
+								},
+								{
+									"key": "releaseDate",
+									"value": "2024-02-06"
+								},
+								{
+									"key": "director",
+									"value": "Denis%20Villeneuve"
+								},
+								{
+									"key": "reviewScore",
+									"value": "8.7"
+								}
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"title\": \"Oppenheimer\",\n  \"director\": \"Christopher Nolan\",\n  \"genre\": \"Thriller\",\n  \"rating\": \"R\",\n  \"length\": \"3h5m\",\n  \"releaseDate\": \"2023-07-21\",\n  \"reviewScore\": 8.9,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{baseUrl}}/movies",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"movies"
-					]
+				{
+					"name": "Create a movie (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"New Movie\",\n    \"director\": \"Director Name\",\n    \"genre\": \"Genre\",\n    \"rating\": \"PG\",\n    \"length\": \"1h30m\",\n    \"releaseDate\": \"2024-12-01\",\n    \"reviewScore\": 7.5,\n    \"currentlyPlaying\": true,\n    \"upcomingRelease\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/movies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get movie details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/movies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a movie (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Movie\",\n    \"director\": \"Updated Director\",\n    \"genre\": \"Updated Genre\",\n    \"rating\": \"PG-13\",\n    \"length\": \"2h00m\",\n    \"releaseDate\": \"2024-12-15\",\n    \"reviewScore\": 8.0,\n    \"currentlyPlaying\": false,\n    \"upcomingRelease\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/movies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a movie (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNDcyNDQsImV4cCI6MTcxNDMzMzY0NH0.ZcQcOljmm2WJxQs1zhryzGM_gxAOrTVcZSKDpSvOe6aGIZtS-H8iOEUV_RIkb6yrigKxDi6EkamvLDSqhRKM_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/movies/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Movie - Dune",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Showtimes",
+			"item": [
+				{
+					"name": "Get all showtimes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/showtimes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes"
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"title\": \"Dune\",\n  \"director\": \"Denis Villeneuve\",\n  \"genre\": \"Science Fiction\",\n  \"rating\": \"PG-13\",\n  \"length\": \"2h35m\",\n  \"releaseDate\": \"2023-08-15\",\n  \"reviewScore\": 8.3,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{baseUrl}}/movies",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"movies"
-					]
+				{
+					"name": "Get showtime details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/showtimes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a showtime (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date_time\": \"2024-06-15T14:30:00\",\n    \"movie_id\": 1,\n    \"theater_box_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/showtimes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a showtime (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date_time\": \"2024-06-15T16:00:00\",\n    \"movie_id\": 2,\n    \"theater_box_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/showtimes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a showtime (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/showtimes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get movies for a showtime",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/showtimes/1/movies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"showtimes",
+								"1",
+								"movies"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Movie - Avatar",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Theater Boxes",
+			"item": [
+				{
+					"name": "Get all theater boxes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/theater_boxes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"theater_boxes"
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"title\": \"Avatar\",\n  \"director\": \"James Cameron\",\n  \"genre\": \"Adventure\",\n  \"rating\": \"PG-13\",\n  \"length\": \"3h12m\",\n  \"releaseDate\": \"2023-12-17\",\n  \"reviewScore\": 8.7,\n  \"currentlyPlaying\": true,\n  \"upcomingRelease\": false\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{baseUrl}}/movies",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"movies"
-					]
+				{
+					"name": "Get theater box details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/theater_boxes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"theater_boxes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a theater box (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boxNumber\": 4,\n    \"totalSeats\": 80,\n    \"reservedSeats\": 0,\n    \"ticketPrice\": 18.99\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/theater_boxes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"theater_boxes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a theater box (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boxNumber\": 1,\n    \"totalSeats\": 60,\n    \"reservedSeats\": 0,\n    \"ticketPrice\": 15.99\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/theater_boxes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"theater_boxes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a theater box (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/theater_boxes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"theater_boxes",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Theater Box",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Reserve seats (Member)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{memberToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"seats\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reservation/reserve?theater_box_id=1&showtime_id=1&seatsReserved=3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reservation",
+								"reserve"
+							],
+							"query": [
+								{
+									"key": "theater_box_id",
+									"value": "1"
+								},
+								{
+									"key": "showtime_id",
+									"value": "1"
+								},
+								{
+									"key": "seatsReserved",
+									"value": "3"
+								}
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"box_number\": 101,\n  \"total_seats\": 50,\n  \"reserved_seats\": 0,\n  \"ticket_price\": 15.75\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{baseUrl}}/theater_boxes",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"theater_boxes"
-					]
+				{
+					"name": "Modify reservation (Member)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{memberToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"seats\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reservation/modify?theater_box=1&showtime_id=1&reservation_id=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reservation",
+								"modify"
+							],
+							"query": [
+								{
+									"key": "theater_box",
+									"value": "1"
+								},
+								{
+									"key": "showtime_id",
+									"value": "1"
+								},
+								{
+									"key": "reservation_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel reservation (Member)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{memberToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reservation/cancel?theater_box=1&showtime_id=1&reservation_id=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reservation",
+								"cancel"
+							],
+							"query": [
+								{
+									"key": "theater_box",
+									"value": "1"
+								},
+								{
+									"key": "showtime_id",
+									"value": "1"
+								},
+								{
+									"key": "reservation_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Theater Box 2",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Memberships",
+			"item": [
+				{
+					"name": "Create a membership",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"box_number\": 102,\n  \"total_seats\": 40,\n  \"reserved_seats\": 0,\n  \"ticket_price\": 12.50\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{baseUrl}}/theater_boxes",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"theater_boxes"
-					]
+				{
+					"name": "Get membership details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/membership/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"membership",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Showtime",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Get summary report (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reports/summary?startTime=2024-01-01T00:00:00&endTime=2024-12-31T23:59:59",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reports",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endTime",
+									"value": "2024-12-31T23:59:59"
+								}
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"date_time\": \"2024-04-19T20:00:00Z\",\n  \"movie_id\": 1,\n  \"theater_box_id\": 101\n}"
-				},
-				"url": {
-					"raw": "{{baseUrl}}/showtimes",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"showtimes"
-					]
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Add Showtime 2",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "Bearer {{accessToken}}"
-					},
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "access_token",
-						"value": "test",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"date_time\": \"2024-04-19T21:00:00Z\",\n  \"movie_id\": 2,\n  \"theater_box_id\": 102\n}"
-				},
-				"url": {
-					"raw": "{{baseUrl}}/showtimes",
-					"host": [
-						"{{baseUrl}}"
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Parse the JSON response body",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Check if the token exists and set it in the environment variables",
+									"if (jsonData && jsonData.token) {",
+									"    pm.environment.set('adminToken', jsonData.token);",
+									"} else {",
+									"    console.log('Token not found in response');",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"path": [
-						"showtimes"
-					]
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"jane.doe@email.com\",\n    \"password\": \"test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\",\n    \"email\": \"jane.doe@example.com\",\n    \"password\": \"password456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{adminToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
 				"type": "text/javascript",
-				"packages": {},
 				"exec": [
 					""
 				]
@@ -276,7 +817,6 @@
 			"listen": "test",
 			"script": {
 				"type": "text/javascript",
-				"packages": {},
 				"exec": [
 					""
 				]
@@ -290,8 +830,13 @@
 			"type": "string"
 		},
 		{
-			"key": "accessToken",
-			"value": "1",
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNTQxMjUsImV4cCI6MTcxNDM0MDUyNX0._V0dyG7zKskDxi1arYcsXHUAQ0kMI7xs8pOUfGYHphEcEZpgglfapiy5gSSMILdi8HbzIE2anXJodqP1MIPJfA",
+			"type": "string"
+		},
+		{
+			"key": "memberToken",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNTQxMjUsImV4cCI6MTcxNDM0MDUyNX0._V0dyG7zKskDxi1arYcsXHUAQ0kMI7xs8pOUfGYHphEcEZpgglfapiy5gSSMILdi8HbzIE2anXJodqP1MIPJfA",
 			"type": "string"
 		}
 	]

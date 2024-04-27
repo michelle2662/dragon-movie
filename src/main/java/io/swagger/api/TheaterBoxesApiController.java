@@ -57,51 +57,45 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 	public ResponseEntity<TheaterBox> theaterBoxesBoxNumberGet(
 			@Parameter(in = ParameterIn.PATH, description = "Number of the theater box to retrieve details for.", required = true, schema = @Schema()) @PathVariable("box_number") Integer boxNumber) {
 
-			try {
-				TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(boxNumber);
-				if (theaterBox != null) {
-					return new ResponseEntity<>(theaterBox, HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-				}
-			} catch (Exception e) {
-				log.error("Error retrieving theater box details", e);
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		try {
+			TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(boxNumber);
+			if (theaterBox != null) {
+				return new ResponseEntity<>(theaterBox, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
+		} catch (Exception e) {
+			log.error("Error retrieving theater box details", e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
 	public ResponseEntity<List<TheaterBox>> theaterBoxesGet() {
 
-			try {
-				List<TheaterBox> theaterBoxes = theaterBoxRepository.findAll();
-				return new ResponseEntity<>(theaterBoxes, HttpStatus.OK);
-			} catch (Exception e) {
-				log.error("Error retrieving theater boxes", e);
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+		try {
+			List<TheaterBox> theaterBoxes = theaterBoxRepository.findAll();
+			return new ResponseEntity<>(theaterBoxes, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Error retrieving theater boxes", e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
-
 	public ResponseEntity<List<TheaterBox>> theaterBoxesPost(
-			@Parameter(in = ParameterIn.HEADER, description = "Admin's access token for authorization.", required = true, schema = @Schema()) @RequestHeader(value = "access_token", required = true) String accessToken,
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body
-			) {
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body) {
+		try {
+			// Save the new theater box to the database
+			TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
 
-			try {
-
-
-				// Save the new theater box to the database
-				TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
-
-				// Return the newly created theater box in the response
-				List<TheaterBox> theaterBoxList = Collections.singletonList(savedTheaterBox);
-				return new ResponseEntity<>(theaterBoxList, HttpStatus.CREATED);
-			} catch (Exception e) {
-				log.error("Error creating new theater box", e);
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+			// Return the newly created theater box in the response
+			List<TheaterBox> theaterBoxList = Collections.singletonList(savedTheaterBox);
+			return new ResponseEntity<>(theaterBoxList, HttpStatus.CREATED);
+		} catch (Exception e) {
+			log.error("Error creating new theater box", e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
