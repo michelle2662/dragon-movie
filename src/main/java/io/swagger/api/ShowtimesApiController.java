@@ -61,8 +61,8 @@ public class ShowtimesApiController implements ShowtimesApi {
     public ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
         log.info("POST /showtimes");
 
-        Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
-        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
+        Optional<Movie> movie = movieRepository.findById(body.getMovieId());
+        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(body.getTheaterBoxId());
         if (movie.isPresent() && theaterBox.isPresent()) {
             Showtime showtime = new Showtime();
             showtime.setDateTime(body.getDateTime());
@@ -116,7 +116,7 @@ public class ShowtimesApiController implements ShowtimesApi {
         Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
         Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
         Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
-        if (optionalShowtime.isPresent()) {
+        if (optionalShowtime.isPresent() && movie.isPresent() && theaterBox.isPresent()){
             Showtime showtime = optionalShowtime.get();
             showtime.setDateTime(body.getDateTime());
             showtime.setMovie(movie.get());

@@ -21,10 +21,10 @@ public class ShowtimeRequestBody   {
   private LocalDateTime dateTime = null;
 
   @JsonProperty("movie_id")
-  private Integer movieId = null;
+  private Long movieId = null;
 
   @JsonProperty("theater_box_id")
-  private Integer theaterBoxId = null;
+  private Long theaterBoxId = null;
 
   public ShowtimeRequestBody dateTime(LocalDateTime dateTime) {
     this.dateTime = dateTime;
@@ -47,7 +47,7 @@ public class ShowtimeRequestBody   {
     this.dateTime = dateTime;
   }
 
-  public ShowtimeRequestBody movieId(Integer movieId) {
+  public ShowtimeRequestBody movieId(Long movieId) {
     this.movieId = movieId;
     return this;
   }
@@ -59,15 +59,15 @@ public class ShowtimeRequestBody   {
   @Schema(example = "123", required = true, description = "ID of the movie associated with the showtime.")
       @NotNull
 
-    public Integer getMovieId() {
+    public Long getMovieId() {
     return movieId;
   }
 
-  public void setMovieId(Integer movieId) {
+  public void setMovieId(Long movieId) {
     this.movieId = movieId;
   }
 
-  public ShowtimeRequestBody theaterBoxId(Integer theaterBoxId) {
+  public ShowtimeRequestBody theaterBoxId(Long theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
     return this;
   }
@@ -79,11 +79,11 @@ public class ShowtimeRequestBody   {
   @Schema(example = "5", required = true, description = "ID of the theater box associated with the showtime.")
       @NotNull
 
-    public Integer getTheaterBoxId() {
+    public Long getTheaterBoxId() {
     return theaterBoxId;
   }
 
-  public void setTheaterBoxId(Integer theaterBoxId) {
+  public void setTheaterBoxId(Long theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
   }
 

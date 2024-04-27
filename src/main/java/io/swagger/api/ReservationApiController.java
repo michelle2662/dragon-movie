@@ -99,7 +99,7 @@ public class ReservationApiController implements ReservationApi {
 		// Delete the reservation
 		reservationRepository.delete(reservation);
 
-		return ResponseEntity.ok(reservation);
+		return ResponseEntity.ok().build();
 	}
 
 	public ResponseEntity<Reservation> reservationModifyPut(

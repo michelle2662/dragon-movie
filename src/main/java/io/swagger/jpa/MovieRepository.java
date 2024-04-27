@@ -12,7 +12,7 @@ import io.swagger.model.Movie;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    @Query("SELECT m.title, SUM(tb.ticketPrice * r.seatsReserved) AS totalRevenue " +
+    @Query("SELECT m.title, ROUND(SUM(tb.ticketPrice * r.seatsReserved), 2) AS totalRevenue " +
        "FROM Movie m " +
        "JOIN m.showtimes s " +
        "JOIN s.reservations r " +
