@@ -3,6 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
@@ -60,6 +61,7 @@ public class Movie {
 	private Boolean upcomingRelease = null;
 
 	@OneToMany(mappedBy = "movie")
+	@JsonManagedReference
 	private Set<Showtime> showtimes;
 
 	public Movie() {

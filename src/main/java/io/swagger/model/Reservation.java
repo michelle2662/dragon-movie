@@ -2,6 +2,7 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.TheaterBox;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,15 +32,28 @@ public class Reservation {
 	private Long id = null;
 
 	@ManyToOne
+	@JsonBackReference
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
 	private Showtime showtime = null;
 	
 	@ManyToOne
+	@JsonBackReference
     @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
     private TheaterBox theaterBox = null;
 
 	@JsonProperty("seatsReserved")
 	private Integer seatsReserved = null;
+
+	public Reservation() {
+
+	}
+
+	public Reservation(Long id, Showtime showtime, TheaterBox theaterBox, Integer seatsReserved) {
+		this.id = id;
+		this.showtime = showtime;
+		this.theaterBox = theaterBox;
+		this.seatsReserved = seatsReserved;
+	}
 
 	@Schema(description = "Identifier for reservation")
 	public Long getId() {

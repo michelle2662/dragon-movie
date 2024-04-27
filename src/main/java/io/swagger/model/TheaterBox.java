@@ -39,6 +39,18 @@ public class TheaterBox {
 	@JsonProperty("ticket_price")
 	private Float ticketPrice = null;
 
+	public TheaterBox() {
+
+	}
+
+	public TheaterBox(Long id, Integer boxNumber, Integer totalSeats, Integer reservedSeats, Float ticketPrice) {
+		this.id = id;
+		this.boxNumber = boxNumber;
+		this.totalSeats = totalSeats;
+		this.reservedSeats = reservedSeats;
+		this.ticketPrice = ticketPrice;
+	}
+
 	public TheaterBox boxNumber(Integer boxNumber) {
 		this.boxNumber = boxNumber;
 		return this;

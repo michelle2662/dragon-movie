@@ -4,8 +4,13 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.validation.annotation.Validated;
@@ -37,13 +42,28 @@ public class Showtime {
 
   @ManyToOne
   @JoinColumn(name = "movie_id", referencedColumnName = "id")
+  @JsonBackReference
   private Movie movie;
 
-  @JsonProperty("theater_box_id")
-  private Integer theaterBoxId = null;
+  @ManyToOne
+  @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
+  @JsonBackReference
+  private TheaterBox theaterBox = null;
 
   @OneToMany(mappedBy = "showtime")
+  @JsonManagedReference
   private Set<Reservation> reservations;
+
+  public Showtime() {
+
+  }
+
+  public Showtime(Long id, LocalDateTime dateTime, Movie movie, TheaterBox theaterBox) {
+    this.id = id;
+    this.dateTime = dateTime;
+    this.movie = movie;
+    this.theaterBox = theaterBox;
+  }
 
   public Showtime id(Long id) {
     this.id = id;
@@ -93,8 +113,8 @@ public class Showtime {
     this.movie = movie;
   }
 
-  public Showtime theaterBoxId(Integer theaterBoxId) {
-    this.theaterBoxId = theaterBoxId;
+  public Showtime theaterBox(TheaterBox theaterBox) {
+    this.theaterBox = theaterBox;
     return this;
   }
 
@@ -104,12 +124,12 @@ public class Showtime {
    **/
   @Schema(example = "5", required = true, description = "ID of the theater box associated with the showtime.")
   @NotNull
-  public Integer getTheaterBoxId() {
-    return theaterBoxId;
+  public TheaterBox getTheaterBox() {
+    return theaterBox;
   }
 
-  public void setTheaterBoxId(Integer theaterBoxId) {
-    this.theaterBoxId = theaterBoxId;
+  public void setTheaterBox(TheaterBox theaterBox) {
+    this.theaterBox = theaterBox;
   }
 
   public Set<Reservation> getReservations() {
@@ -137,12 +157,12 @@ public class Showtime {
     return Objects.equals(this.id, showtime.id) &&
         Objects.equals(this.dateTime, showtime.dateTime) &&
         Objects.equals(this.movie, showtime.movie) &&
-        Objects.equals(this.theaterBoxId, showtime.theaterBoxId);
+        Objects.equals(this.theaterBox, showtime.theaterBox);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dateTime, movie, theaterBoxId);
+    return Objects.hash(id, dateTime, movie, theaterBox);
   }
 
   @Override
@@ -152,7 +172,7 @@ public class Showtime {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dateTime: ").append(toIndentedString(dateTime)).append("\n");
     sb.append("    movie: ").append(toIndentedString(movie)).append("\n");
-    sb.append("    theaterBoxId: ").append(toIndentedString(theaterBoxId)).append("\n");
+    sb.append("    theaterBoxId: ").append(toIndentedString(theaterBox)).append("\n");
     sb.append("}");
     return sb.toString();
   }

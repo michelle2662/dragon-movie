@@ -2,9 +2,11 @@ package io.swagger.api;
 
 import io.swagger.jpa.MovieRepository;
 import io.swagger.jpa.ShowtimeRepository;
+import io.swagger.jpa.TheaterBoxRepository;
 import io.swagger.model.Movie;
 import io.swagger.model.Showtime;
 import io.swagger.model.ShowtimeRequestBody;
+import io.swagger.model.TheaterBox;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,6 +44,9 @@ public class ShowtimesApiController implements ShowtimesApi {
     private MovieRepository movieRepository;
 
     @Autowired
+    private TheaterBoxRepository theaterBoxRepository;
+
+    @Autowired
     public ShowtimesApiController(HttpServletRequest request) {
         this.request = request;
     }
@@ -57,11 +62,12 @@ public class ShowtimesApiController implements ShowtimesApi {
         log.info("POST /showtimes");
 
         Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
+        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
         if (movie.isPresent()) {
             Showtime showtime = new Showtime();
             showtime.setDateTime(body.getDateTime());
             showtime.setMovie(movie.get());
-            showtime.setTheaterBoxId(body.getTheaterBoxId());
+            showtime.setTheaterBox(theaterBox.get());
 
             Showtime createdShowtime = showtimeRepository.save(showtime);
             URI location = UriComponentsBuilder.fromPath("apis/MORGANMAZER/dragon/1.0/showtimes/" + createdShowtime.getId()).build().toUri();
@@ -109,11 +115,12 @@ public class ShowtimesApiController implements ShowtimesApi {
 
         Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
         Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
+        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
         if (optionalShowtime.isPresent()) {
             Showtime showtime = optionalShowtime.get();
             showtime.setDateTime(body.getDateTime());
             showtime.setMovie(movie.get());
-            showtime.setTheaterBoxId(body.getTheaterBoxId());
+            showtime.setTheaterBox(theaterBox.get());
 
             showtimeRepository.save(showtime);
             return ResponseEntity.ok().build();
