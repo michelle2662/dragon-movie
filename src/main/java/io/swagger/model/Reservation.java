@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 
-//@Entity
+@Entity
 public class Reservation {
 	
 	@Id
@@ -32,7 +32,7 @@ public class Reservation {
 
 	@ManyToOne
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
-	private Long showtimeId = null;
+	private Showtime showtime = null;
 	
 	@ManyToOne
     @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
@@ -50,17 +50,17 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public Reservation showtimeId(Long showtimeId) {
-		this.showtimeId = showtimeId;
+	public Reservation showtimeId(Showtime showtime) {
+		this.showtime = showtime;
 		return this;
 	}
 
-	public Long getShowtimeId() {
-		return showtimeId;
+	public Showtime getShowtime() {
+		return showtime;
 	}
 
-	public void setShowtimeId(Long showtimeId) {
-		this.showtimeId = showtimeId;
+	public void setShowtime(Showtime showtime) {
+		this.showtime = showtime;
 	}
 
 	public Reservation theaterBox(TheaterBox theaterBox) {
@@ -101,18 +101,18 @@ public class Reservation {
 			return false;
 		}
 		Reservation reservation = (Reservation) o;
-		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtimeId, reservation.showtimeId)
+		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtime, reservation.showtime)
 				&& Objects.equals(this.theaterBox, reservation.theaterBox) && Objects.equals(this.seatsReserved, reservation.seatsReserved);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, showtimeId, theaterBox, seatsReserved);
+		return Objects.hash(id, showtime, theaterBox, seatsReserved);
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", showtimeId=" + showtimeId + ", theaterBoxNumber=" + theaterBox + ", seatsReserved=" + seatsReserved + "]";
+		return "Reservation [id=" + id + ", showtime=" + showtime+ ", theaterBoxNumber=" + theaterBox + ", seatsReserved=" + seatsReserved + "]";
 	}
 
 }

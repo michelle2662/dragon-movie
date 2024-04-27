@@ -69,81 +69,81 @@ public class ReservationApiController implements ReservationApi {
 		this.request = request;
 	}
 
-    public ResponseEntity<Reservation> reservationCancelDelete(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) Long theaterBoxId
-,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
-,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to cancel." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
-) {
-				// Check if the reservation exists
-				Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
-				if (!optionalReservation.isPresent()) {
-					return ResponseEntity.notFound().build();
-				}
-				Reservation reservation = optionalReservation.get();
+		public ResponseEntity<Reservation> reservationCancelDelete(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) Long theaterBoxId
+	,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
+	,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to cancel." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
+	) {
+					// Check if the reservation exists
+					Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
+					if (!optionalReservation.isPresent()) {
+						return ResponseEntity.notFound().build();
+					}
+					Reservation reservation = optionalReservation.get();
 
-				// Check if the showtime has already occurred
-				Optional<Showtime> optionalShowtime = showtimeRepository.findById(reservation.getShowtimeId());
-				if (optionalShowtime.isPresent()) {
-					Showtime showtime = optionalShowtime.get();
-					if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
+					// Check if the showtime has already occurred
+					Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+					if (optionalShowtime.isPresent()) {
+						Showtime showtime = optionalShowtime.get();
+						if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
+							return ResponseEntity.status(HttpStatus.CONFLICT).build();
+						}
+					} else {
+						return ResponseEntity.notFound().build();
+					}
+
+					// Update the reserved seats in the theater box
+					TheaterBox retrievedTheaterBox = reservation.getTheaterBox();
+					retrievedTheaterBox.setReservedSeats(retrievedTheaterBox.getReservedSeats() - reservation.getSeatsReserved());
+					theaterBoxRepository.save(retrievedTheaterBox);
+
+					// Delete the reservation
+					reservationRepository.delete(reservation);
+
+					return ResponseEntity.ok(reservation);
+				}
+		
+
+		public ResponseEntity<Reservation> reservationModifyPut(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Number of the theater box." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) Long theaterBoxId
+				,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
+				,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to modify." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
+				,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationModifyBody body
+				) {
+					// Check if the reservation exists
+					Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
+					if (!optionalReservation.isPresent()) {
+						return ResponseEntity.notFound().build();
+					}
+					Reservation reservation = optionalReservation.get();
+
+					// Check if the showtime has already occurred
+					Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
+					if (optionalShowtime.isPresent()) {
+						Showtime showtime = optionalShowtime.get();
+						if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
+							return ResponseEntity.status(HttpStatus.CONFLICT).build();
+						}
+					} else {
+						return ResponseEntity.notFound().build();
+					}
+
+					// Check if the requested number of seats is available
+					int availableSeats = reservation.getTheaterBox().getTotalSeats() - reservation.getTheaterBox().getReservedSeats() + reservation.getSeatsReserved();
+					if (body.getSeats() > availableSeats) {
 						return ResponseEntity.status(HttpStatus.CONFLICT).build();
 					}
-				} else {
-					return ResponseEntity.notFound().build();
-				}
 
-				// Update the reserved seats in the theater box
-				TheaterBox retrievedTheaterBox = reservation.getTheaterBox();
-				retrievedTheaterBox.setReservedSeats(retrievedTheaterBox.getReservedSeats() - reservation.getSeatsReserved());
-				theaterBoxRepository.save(retrievedTheaterBox);
+					// Update the reservation
+					int seatsChange = body.getSeats() - reservation.getSeatsReserved();
+					reservation.setSeatsReserved(body.getSeats());
+					reservationRepository.save(reservation);
 
-				// Delete the reservation
-				reservationRepository.delete(reservation);
+					// Update the reserved seats in the theater box
+					TheaterBox retrievedTheaterBox = reservation.getTheaterBox();
+					retrievedTheaterBox.setReservedSeats(retrievedTheaterBox.getReservedSeats() + seatsChange);
+					theaterBoxRepository.save(retrievedTheaterBox);
 
-				return ResponseEntity.ok(reservation);
-			}
-	
-
-	public ResponseEntity<Reservation> reservationModifyPut(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Number of the theater box." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "theater_box", required = true) Long theaterBoxId
-			,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the showtime." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "showtime_id", required = true) Long showtimeId
-			,@NotNull @Parameter(in = ParameterIn.QUERY, description = "ID of the reservation to modify." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "reservation_id", required = true) Long reservationId
-			,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationModifyBody body
-			) {
-				// Check if the reservation exists
-				Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
-				if (!optionalReservation.isPresent()) {
-					return ResponseEntity.notFound().build();
-				}
-				Reservation reservation = optionalReservation.get();
-
-				// Check if the showtime has already occurred
-				Optional<Showtime> optionalShowtime = showtimeRepository.findById(reservation.getShowtimeId());
-				if (optionalShowtime.isPresent()) {
-					Showtime showtime = optionalShowtime.get();
-					if (showtime.getDateTime().isBefore(OffsetDateTime.now())) {
-						return ResponseEntity.status(HttpStatus.CONFLICT).build();
-					}
-				} else {
-					return ResponseEntity.notFound().build();
-				}
-
-				// Check if the requested number of seats is available
-				int availableSeats = reservation.getTheaterBox().getTotalSeats() - reservation.getTheaterBox().getReservedSeats() + reservation.getSeatsReserved();
-				if (body.getSeats() > availableSeats) {
-					return ResponseEntity.status(HttpStatus.CONFLICT).build();
-				}
-
-				// Update the reservation
-				int seatsChange = body.getSeats() - reservation.getSeatsReserved();
-				reservation.setSeatsReserved(body.getSeats());
-				reservationRepository.save(reservation);
-
-				// Update the reserved seats in the theater box
-				TheaterBox retrievedTheaterBox = reservation.getTheaterBox();
-				retrievedTheaterBox.setReservedSeats(retrievedTheaterBox.getReservedSeats() + seatsChange);
-				theaterBoxRepository.save(retrievedTheaterBox);
-
-				return ResponseEntity.ok(reservation);
-    }
+					return ResponseEntity.ok(reservation);
+		}
 			
 
 	public ResponseEntity<Reservation> reservationReservePost(
@@ -172,7 +172,7 @@ public class ReservationApiController implements ReservationApi {
 
 				// Create the reservation
 				Reservation reservation = new Reservation();
-				reservation.setShowtimeId(showtime.getId());
+				reservation.setShowtime(showtime);
 				reservation.setTheaterBox(retrievedTheaterBox);
 				reservation.setSeatsReserved(body.getSeats());
 				reservationRepository.save(reservation);

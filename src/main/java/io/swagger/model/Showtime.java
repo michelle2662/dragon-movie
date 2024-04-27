@@ -1,6 +1,8 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -38,6 +41,9 @@ public class Showtime {
 
   @JsonProperty("theater_box_id")
   private Integer theaterBoxId = null;
+
+  @OneToMany(mappedBy = "showtime")
+  private Set<Reservation> reservations;
 
   public Showtime id(Long id) {
     this.id = id;
@@ -104,6 +110,19 @@ public class Showtime {
 
   public void setTheaterBoxId(Integer theaterBoxId) {
     this.theaterBoxId = theaterBoxId;
+  }
+
+  public Set<Reservation> getReservations() {
+    return reservations;
+  }
+
+  public void setReservations(Set<Reservation> reservations) {
+    this.reservations = reservations;
+  }
+
+  public Showtime reservations(Set<Reservation> reservations) {
+    this.reservations = reservations;
+    return this;
   }
 
   @Override
