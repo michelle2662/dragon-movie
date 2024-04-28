@@ -3,6 +3,7 @@ package io.swagger.api;
 import io.swagger.jpa.MembershipRepository;
 import io.swagger.jpa.ReservationRepository;
 import io.swagger.jpa.ShowtimeRepository;
+import io.swagger.model.Membership;
 import io.swagger.model.Reservation;
 import io.swagger.model.ReservationsBody;
 import io.swagger.model.ReservationsReservationIdBody;
@@ -78,15 +79,16 @@ public class ReservationsApiController implements ReservationsApi {
         log.info("GET /reservations");
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
-        Long memberId = membershipRepository.findIdByEmail(email).orElse(null);
+        Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
 
-        if (memberId == null) {
+        if (!optionalMembership.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        Membership membership = optionalMembership.get();
 
-        Optional<List<Reservation>> reservations = reservationRepository.findByMemberId(memberId);
-
+        List<Reservation> reservations = reservationRepository.findByMemberId(membership.getId());
         return ResponseEntity.ok(reservations);
+        
     }
 
     public ResponseEntity<Reservation> reservationsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationsBody body, @RequestHeader("Authorization") String token
@@ -94,20 +96,21 @@ public class ReservationsApiController implements ReservationsApi {
         log.info("POST /reservations");
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
-        Long memberId = membershipService.getMemberIdByEmail(email);
+        Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
 
-        if (memberId == null) {
+        if (!optionalMembership.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         if (!showtimeRepository.existsById(body.getShowtimeId())) {
             return ResponseEntity.notFound().build();
         }
+        Membership membership = optionalMembership.get();
 
         Reservation reservation = new Reservation();
         reservation.setShowtime(showtimeRepository.findById(body.getShowtimeId()).get());
         reservation.setSeatsReserved(body.getSeatsReserved());
-        reservation.setMemberId(memberId);
+        reservation.setMember(membership);
 
         Reservation savedReservation = reservationRepository.save(reservation);
 
@@ -119,23 +122,28 @@ public class ReservationsApiController implements ReservationsApi {
         log.info("DELETE /reservations/{}", reservationId);
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
-        Long memberId = membershipService.getMemberIdByEmail(email);
+        Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
 
-        if (memberId == null) {
+        if (!optionalMembership.isPresent()) {
+            log.warn("Unauthorized access attempt. User not found with email: {}", email);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        Membership membership = optionalMembership.get();
 
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         if (!optionalReservation.isPresent()) {
+            log.warn("Reservation not found with ID: {}", reservationId);
             return ResponseEntity.notFound().build();
         }
 
         Reservation reservation = optionalReservation.get();
-        if (!reservation.getMemberId().equals(memberId)) {
+        if (!reservation.getMember().equals(membership)) {
+            log.warn("Forbidden access attempt. User {} tried to delete reservation {}", email, reservationId);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         reservationRepository.delete(reservation);
+        log.info("Reservation deleted successfully. ID: {}", reservationId);
 
         return ResponseEntity.noContent().build();
     }
@@ -146,11 +154,12 @@ public class ReservationsApiController implements ReservationsApi {
         log.info("PUT /reservations/{}", reservationId);
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
-        Long memberId = membershipService.getMemberIdByEmail(email);
+        Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
 
-        if (memberId == null) {
+        if (!optionalMembership.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        Membership membership = optionalMembership.get();
 
         Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         if (!optionalReservation.isPresent()) {
@@ -158,7 +167,7 @@ public class ReservationsApiController implements ReservationsApi {
         }
 
         Reservation reservation = optionalReservation.get();
-        if (!reservation.getMemberId().equals(memberId)) {
+        if (!reservation.getMember().equals(membership)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 

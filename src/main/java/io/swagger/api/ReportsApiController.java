@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 import io.swagger.jpa.MovieRepository;
 import javax.validation.Valid;
@@ -57,8 +57,7 @@ public class ReportsApiController implements ReportsApi {
     }
 
     public ResponseEntity<Map<String, BigDecimal>> reportsSummaryGet(
-            @NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "start_date_time", required = true) LocalDateTime startDateTime,
-            @NotNull @Parameter(in = ParameterIn.QUERY, description = "End date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "end_date_time", required = true) LocalDateTime endDateTime) {
+            @NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "start_date_time", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
         List<Object[]> results = movieRepository.findTotalRevenueByMovie(startDateTime, endDateTime);
         Map<String, BigDecimal> response = new HashMap<>();
 

@@ -27,10 +27,4 @@ public class MembershipService implements UserDetailsService {
         return new User(membership.getEmail(), membership.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority(membership.getRole())));
     }
-
-    public Long getMemberIdByEmail(String email) {
-        return membershipRepository.findByEmail(email)
-        .map(Membership::getId)
-        .orElse(null);
-    }
 }

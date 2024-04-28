@@ -36,8 +36,11 @@ public class Reservation {
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
 	private Showtime showtime = null;
 	
+	@ManyToOne
+	@JsonBackReference("membership-reservation")
+	@JoinColumn(name = "member_id", referencedColumnName = "id")
 	@JsonProperty("memberId")
-	private Long memberId = null;
+	private Membership member = null;
 
 	@JsonProperty("seatsReserved")
 	private Integer seatsReserved = null;
@@ -88,17 +91,17 @@ public class Reservation {
 		return this;
 	}
 	
-	public Reservation memberId(Long memberId) {
-		this.memberId = memberId;
+	public Reservation memberId(Membership member) {
+		this.member = member;
 		return this;
 	}
 	
-	public Long getMemberId() {
-		return memberId;
+	public Membership getMember() {
+		return member;
 	}
 
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
+	public void setMember(Membership member) {
+		this.member = member;
 	}
 
 

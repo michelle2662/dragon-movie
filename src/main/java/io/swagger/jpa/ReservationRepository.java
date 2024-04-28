@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    Optional<List<Reservation>> findByMemberId(Long memberId);
+    List<Reservation> findByMemberId(Long memberId);
 }
