@@ -1,16 +1,22 @@
 package io.swagger.model;
 
 import java.util.Objects;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -28,6 +34,7 @@ public class TheaterBox {
     private Long id = null;
 	
 	@Column(unique = true)
+	@JsonProperty("box_number")
     private Integer boxNumber = null;
 
 	@JsonProperty("total_seats")
@@ -38,6 +45,11 @@ public class TheaterBox {
 
 	@JsonProperty("ticket_price")
 	private Float ticketPrice = null;
+
+	@OneToMany(mappedBy = "theaterBox", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference("theaterBox-showtime")
+	private Set<Showtime> showtimes;
+
 
 	public TheaterBox() {
 
@@ -142,6 +154,19 @@ public class TheaterBox {
 
 	public void setTicketPrice(Float ticketPrice) {
 		this.ticketPrice = ticketPrice;
+	}
+
+	public Set<Showtime> getShowtimes() {
+		return showtimes;
+	}
+
+	public void setShowtimes(Set<Showtime> showtimes) {
+		this.showtimes = showtimes;
+	}
+
+	public TheaterBox showtimes(Set<Showtime> showtimes) {
+		this.showtimes = showtimes;
+		return this;
 	}
 
 	@Override

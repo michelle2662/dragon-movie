@@ -412,144 +412,121 @@ paths:
           description: Theater box deleted successfully.
         "403":
           description: Forbidden. Only admins are allowed to perform this action.
-  /reservation/reserve:
-    post:
-      summary: Reserve seats for a given showtime
-      description: Allows a member to reserve one or more seats for a given showtime.
+  /reservations:
+    get:
+      summary: Get all reservations for the authenticated member
+      description: Allows a member to retrieve all their reservations.
       security:
-      - bearerAuth: []
-      parameters:
-      - name: theater_box
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/TheaterBox'
-      - name: showtime_id
-        in: query
-        description: ID of the showtime.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully retrieved member's reservations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+        "401":
+          description: Unauthorized. Member access token is invalid.
+
+    post:
+      summary: Create a reservation
+      description: Allows a member to create a reservation.
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/reservation_reserve_body'
+              type: object
+              properties:
+                showtime_id:
+                  type: integer
+                seats_reserved:
+                  type: integer
         required: true
       responses:
-        "200":
-          description: Seats successfully reserved.
+        "201":
+          description: Reservation successfully created.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reservation'
         "400":
-          description: Bad request. Invalid number of seats requested or seats not available.
+          description: Bad request. Invalid data provided.
         "401":
           description: Unauthorized. Member access token is invalid.
         "404":
-          description: Not found. Theater box or showtime not found.
+          description: Not found. Showtime not found.
         "409":
           description: Conflict. Requested number of seats not available.
-  /reservation/cancel:
-    delete:
-      summary: Cancel reservation for a given showtime
-      description: Allows a member to cancel their reservation for a given showtime.
-      security:
-      - bearerAuth: []
-      parameters:
-      - name: theater_box
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/TheaterBox'
-      - name: showtime_id
-        in: query
-        description: ID of the showtime.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: reservation_id
-        in: query
-        description: ID of the reservation to cancel.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      responses:
-        "200":
-          description: Reservation successfully canceled.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Reservation'
-        "401":
-          description: Unauthorized. Member access token is invalid.
-        "404":
-          description: "Not found. Theater box, showtime, or reservation not found."
-        "409":
-          description: Conflict. Showtime has already occurred.
-  /reservation/modify:
+
+  /reservations/{reservation_id}:
     put:
-      summary: Modify reservation for a given showtime
-      description: Allows a member to modify their reservation for a given showtime.
+      summary: Update a reservation
+      description: Allows a member to update their reservation.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       parameters:
-      - name: theater_box
-        in: query
-        description: Number of the theater box.
-        required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/TheaterBox'
-      - name: showtime_id
-        in: query
-        description: ID of the showtime.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: reservation_id
-        in: query
-        description: ID of the reservation to modify.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: reservation_id
+          in: path
+          description: ID of the reservation to update.
+          required: true
+          schema:
+            type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/reservation_modify_body'
+              type: object
+              properties:
+                showtime_id:
+                  type: integer
+                seats_reserved:
+                  type: integer
         required: true
       responses:
         "200":
-          description: Reservation successfully modified.
+          description: Reservation successfully updated.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Reservation'
         "400":
-          description: Bad request. Invalid number of seats requested or seats not available.
+          description: Bad request. Invalid data provided.
         "401":
           description: Unauthorized. Member access token is invalid.
+        "403":
+          description: Forbidden. Member does not have permission to update this reservation.
         "404":
-          description: "Not found. Theater box, showtime, or reservation not found."
+          description: Not found. Reservation or showtime not found.
         "409":
-          description: Conflict. Requested number of seats not available for the given showtime.
+          description: Conflict. Requested number of seats not available.
+
+    delete:
+      summary: Cancel a reservation
+      description: Allows a member to cancel their reservation.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reservation_id
+          in: path
+          description: ID of the reservation to cancel.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Reservation successfully canceled.
+        "401":
+          description: Unauthorized. Member access token is invalid.
+        "403":
+          description: Forbidden. Member does not have permission to cancel this reservation.
+        "404":
+          description: Not found. Reservation not found.
+        "409":
+          description: Conflict. Showtime has already occurred.
   /showtimes:
     get:
       summary: Get all showtimes
@@ -682,20 +659,20 @@ paths:
       security:
       - bearerAuth: []
       parameters:
-      - name: startDate
+      - name: start_date_time
         in: query
         description: Start date of the report period.
         required: true
         schema:
           type: string
-          format: date
-      - name: endDate
+          format: date-time
+      - name: end_date_time
         in: query
         description: End date of the report period.
         required: true
         schema:
           type: string
-          format: date
+          format: date-time
       responses:
         "200":
           description: Summary report retrieved successfully.
@@ -894,23 +871,3 @@ components:
           description: Identifier of the showtime associated with the reservation
           allOf:
           - $ref: '#/components/schemas/Showtime/properties/id'
-        theater_box:
-          $ref: '#/components/schemas/TheaterBox'
-    reservation_reserve_body:
-      required:
-      - seats
-      type: object
-      properties:
-        seats:
-          minimum: 1
-          type: integer
-          description: Number of seats to reserve.
-    reservation_modify_body:
-      required:
-      - seats
-      type: object
-      properties:
-        seats:
-          minimum: 1
-          type: integer
-          description: New number of seats for the reservation.

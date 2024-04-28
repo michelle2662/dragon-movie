@@ -3,15 +3,20 @@ package io.swagger.model;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.Set;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 
@@ -43,6 +48,12 @@ public class Membership {
 
 	@JsonProperty("role")
     private String role;
+
+	@JsonProperty("reservations")
+	@JsonManagedReference("membership-reservation")
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Reservation> reservations;
+
 
 	public Membership() {
 
@@ -115,6 +126,18 @@ public class Membership {
         this.role = role;
     }
 
+	public Membership reservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+		return this;
+	}
+
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
 
 	@Override
 	public boolean equals(java.lang.Object o) {

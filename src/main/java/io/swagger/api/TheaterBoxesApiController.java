@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
 @RestController
@@ -83,9 +84,52 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 
 	}
 
+	public ResponseEntity<Void> theaterBoxesIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to delete.", required=true, schema=@Schema()) @PathVariable("id") Long id
+	) {
+		try {
+			Optional<TheaterBox> optionalTheaterBox = theaterBoxRepository.findById(id);
+			if (optionalTheaterBox.isPresent()) {
+				TheaterBox theaterBox = optionalTheaterBox.get();
+				theaterBoxRepository.delete(theaterBox);
+				return ResponseEntity.noContent().build();
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		} catch (Exception e) {
+			log.error("Error deleting theater box", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+		public ResponseEntity<Void> theaterBoxesIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to update.", required=true, schema=@Schema()) @PathVariable("id") Long id
+	,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
+	) {
+		try {
+			Optional<TheaterBox> optionalTheaterBox = theaterBoxRepository.findById(id);
+			if (optionalTheaterBox.isPresent()) {
+				TheaterBox theaterBox = optionalTheaterBox.get();
+				theaterBox.setBoxNumber(body.getBoxNumber());
+				theaterBox.setTotalSeats(body.getTotalSeats());
+				theaterBox.setReservedSeats(body.getReservedSeats());
+				theaterBox.setTicketPrice(body.getTicketPrice());
+				theaterBoxRepository.save(theaterBox);
+				return ResponseEntity.ok().build();
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+		} catch (Exception e) {
+			log.error("Error updating theater box", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+
 	public ResponseEntity<List<TheaterBox>> theaterBoxesPost(
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body) {
 		try {
+			if (theaterBoxRepository.existsByBoxNumber(body.getBoxNumber())) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).build();  // HTTP 409 Conflict
+			}
 			// Save the new theater box to the database
 			TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
 

@@ -23,6 +23,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -48,11 +50,11 @@ public class Showtime {
 
   @ManyToOne
   @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
-  @JsonBackReference
+  @JsonBackReference("theaterBox-showtime")
   private TheaterBox theaterBox = null;
 
   @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
+  @JsonManagedReference("showtime-reservation")
   private Set<Reservation> reservations;
 
   public Showtime() {
@@ -145,6 +147,11 @@ public class Showtime {
     this.reservations = reservations;
     return this;
   }
+
+  public void addReservation(Reservation reservation) {
+    reservations.add(reservation);
+    reservation.setShowtime(this);
+}
 
   @Override
   public boolean equals(java.lang.Object o) {
