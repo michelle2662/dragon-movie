@@ -55,6 +55,31 @@ public interface TheaterBoxesApi {
     ResponseEntity<List<TheaterBox>> theaterBoxesGet();
 
 
+    @Operation(summary = "Delete a theater box", description = "Allows an admin to delete a theater box.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "204", description = "Theater box deleted successfully."),
+        
+        @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+    @RequestMapping(value = "/theater_boxes/{id}",
+        method = RequestMethod.DELETE)
+    ResponseEntity<Void> theaterBoxesIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to delete.", required=true, schema=@Schema()) @PathVariable("id") Long id
+);
+
+
+    @Operation(summary = "Update a theater box", description = "Allows an admin to update a theater box.", security = {
+        @SecurityRequirement(name = "bearerAuth")    }, tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "Theater box updated successfully."),
+        
+        @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+    @RequestMapping(value = "/theater_boxes/{id}",
+        consumes = { "application/json" }, 
+        method = RequestMethod.PUT)
+    ResponseEntity<Void> theaterBoxesIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to update.", required=true, schema=@Schema()) @PathVariable("id") Long id
+, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
+);
+
     @Operation(summary = "Create a new theater box", description = "Allows an admin to create a new theater box.", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 

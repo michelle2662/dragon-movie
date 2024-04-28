@@ -21,7 +21,7 @@ public class ReportsController {
     @Autowired
     private MovieRepository movieRepository;
 
-    @GetMapping("/summary")
+    @GetMapping("/summary_save")
     public ResponseEntity<Map<String, Object>> getSummaryReport(
             @RequestParam("startTime") String startTimeStr,
             @RequestParam("endTime") String endTimeStr) {

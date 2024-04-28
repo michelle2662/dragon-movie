@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f2d73b19-f610-4286-b2b8-0d2df32260cc",
+		"_postman_id": "3fe31da5-d83f-41f2-9c76-d267d1ad6254",
 		"name": "Dragon Movie API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33974804"
@@ -127,7 +127,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Updated Movie\",\n    \"director\": \"Updated Director\",\n    \"genre\": \"Updated Genre\",\n    \"rating\": \"PG-13\",\n    \"length\": \"2h00m\",\n    \"releaseDate\": \"2024-12-15\",\n    \"reviewScore\": 8.0,\n    \"currentlyPlaying\": false,\n    \"upcomingRelease\": true\n}"
+							"raw": "{\n    \"title\": \"Updated Movie\",\n    \"director\": \"Updated Director\",\n    \"genre\": \"Updated Genre\",\n    \"rating\": \"PG-13\",\n    \"length\": \"2h00m\",\n    \"releaseDate\": \"2024-12-15\",\n    \"reviewScore\": 8.0,\n    \"currentlyPlaying\": false,\n    \"upcomingRelease\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/movies/1",
@@ -150,7 +155,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNDcyNDQsImV4cCI6MTcxNDMzMzY0NH0.ZcQcOljmm2WJxQs1zhryzGM_gxAOrTVcZSKDpSvOe6aGIZtS-H8iOEUV_RIkb6yrigKxDi6EkamvLDSqhRKM_Q",
+									"value": "{{adminToken}}",
 									"type": "string"
 								}
 							]
@@ -165,6 +170,63 @@
 							"path": [
 								"movies",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set a movie's currently playing status (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentlyPlaying\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/movies/1/currentlyPlaying",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies",
+								"1",
+								"currentlyPlaying"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get showtimes for a specific movie",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/movies/1/showtimes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"movies",
+								"1",
+								"showtimes"
 							]
 						}
 					},
@@ -263,7 +325,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"date_time\": \"2024-06-15T16:00:00\",\n    \"movie_id\": 2,\n    \"theater_box_id\": 2\n}",
+							"raw": "{\n    \"date_date\": \"2024-06-15T16:00:00\",\n    \"movie_id\": 2,\n    \"theater_box_id\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -387,7 +449,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"boxNumber\": 4,\n    \"totalSeats\": 80,\n    \"reservedSeats\": 0,\n    \"ticketPrice\": 18.99\n}"
+							"raw": "{\n    \"box_number\": 4,\n    \"total_seats\": 80,\n    \"reserved_seats\": 0,\n    \"ticket_price\": 18.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/theater_boxes",
@@ -418,7 +485,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"boxNumber\": 1,\n    \"totalSeats\": 60,\n    \"reservedSeats\": 0,\n    \"ticketPrice\": 15.99\n}"
+							"raw": "{\n    \"boxNumber\": 1,\n    \"totalSeats\": 60,\n    \"reservedSeats\": 0,\n    \"ticketPrice\": 15.99\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/theater_boxes/1",
@@ -467,6 +539,24 @@
 			"name": "Reservations",
 			"item": [
 				{
+					"name": "Get member reservations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reservations/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reservations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Reserve seats (Member)",
 					"request": {
 						"auth": {
@@ -483,7 +573,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"seats\": 1\n}",
+							"raw": "{\n    \"showtime_id\": 1,\n    \"seats_reserved\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -491,27 +581,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/reservation/reserve?theater_box_id=1&showtime_id=1&seatsReserved=3",
+							"raw": "{{baseUrl}}/reservations",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"reservation",
-								"reserve"
-							],
-							"query": [
-								{
-									"key": "theater_box_id",
-									"value": "1"
-								},
-								{
-									"key": "showtime_id",
-									"value": "1"
-								},
-								{
-									"key": "seatsReserved",
-									"value": "3"
-								}
+								"reservations"
 							]
 						}
 					},
@@ -534,7 +609,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"seats\": 4\n}",
+							"raw": "{\n    \"showtime_id\": 1,\n    \"seats_reserved\": 12\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -542,26 +617,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/reservation/modify?theater_box=1&showtime_id=1&reservation_id=1",
+							"raw": "{{baseUrl}}/reservations/5",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"reservation",
-								"modify"
+								"reservations",
+								"5"
 							],
 							"query": [
 								{
-									"key": "theater_box",
-									"value": "1"
-								},
-								{
-									"key": "showtime_id",
-									"value": "1"
-								},
-								{
-									"key": "reservation_id",
-									"value": "1"
+									"key": "",
+									"value": null,
+									"disabled": true
 								}
 							]
 						}
@@ -584,27 +652,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/reservation/cancel?theater_box=1&showtime_id=1&reservation_id=1",
+							"raw": "{{baseUrl}}/reservations/5",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"reservation",
-								"cancel"
-							],
-							"query": [
-								{
-									"key": "theater_box",
-									"value": "1"
-								},
-								{
-									"key": "showtime_id",
-									"value": "1"
-								},
-								{
-									"key": "reservation_id",
-									"value": "1"
-								}
+								"reservations",
+								"5"
 							]
 						}
 					},
@@ -618,9 +672,6 @@
 				{
 					"name": "Create a membership",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -633,13 +684,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/auth/register",
+							"raw": "{{baseUrl}}/membership",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"auth",
-								"register"
+								"membership"
 							]
 						}
 					},
@@ -713,36 +763,6 @@
 			"item": [
 				{
 					"name": "Login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Parse the JSON response body",
-									"var jsonData = pm.response.json();",
-									"",
-									"// Check if the token exists and set it in the environment variables",
-									"if (jsonData && jsonData.token) {",
-									"    pm.environment.set('adminToken', jsonData.token);",
-									"} else {",
-									"    console.log('Token not found in response');",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -775,7 +795,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\",\n    \"email\": \"jane.doe@example.com\",\n    \"password\": \"password456\"\n}"
+							"raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Doe\",\n    \"email\": \"jane.doe@example.com\",\n    \"password\": \"password456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/auth/register",
@@ -831,12 +856,12 @@
 		},
 		{
 			"key": "adminToken",
-			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNTQxMjUsImV4cCI6MTcxNDM0MDUyNX0._V0dyG7zKskDxi1arYcsXHUAQ0kMI7xs8pOUfGYHphEcEZpgglfapiy5gSSMILdi8HbzIE2anXJodqP1MIPJfA",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyODM0MjUsImV4cCI6MTcxNDM2OTgyNX0.QvvtN0OPi8MDtwPRR-u7Y4QECXF2Nxdie7lrAjZd88nkZTxqV3AsnsDWbB_KUGunRC2p8yToTRy8-qZycTMdsw",
 			"type": "string"
 		},
 		{
 			"key": "memberToken",
-			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyNTQxMjUsImV4cCI6MTcxNDM0MDUyNX0._V0dyG7zKskDxi1arYcsXHUAQ0kMI7xs8pOUfGYHphEcEZpgglfapiy5gSSMILdi8HbzIE2anXJodqP1MIPJfA",
+			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYW5lLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE3MTQyODM0MjUsImV4cCI6MTcxNDM2OTgyNX0.QvvtN0OPi8MDtwPRR-u7Y4QECXF2Nxdie7lrAjZd88nkZTxqV3AsnsDWbB_KUGunRC2p8yToTRy8-qZycTMdsw",
 			"type": "string"
 		}
 	]

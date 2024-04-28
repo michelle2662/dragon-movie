@@ -114,8 +114,11 @@ public class ShowtimesApiController implements ShowtimesApi {
         log.info("PUT /showtimes/{}", showtimeId);
 
         Optional<Showtime> optionalShowtime = showtimeRepository.findById(showtimeId);
-        Optional<Movie> movie = movieRepository.findById(Long.valueOf(body.getMovieId()));
-        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(Long.valueOf(body.getTheaterBoxId()));
+        if (body.getMovieId() == null || body.getTheaterBoxId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<Movie> movie = movieRepository.findById(body.getMovieId());
+        Optional<TheaterBox> theaterBox = theaterBoxRepository.findById(body.getTheaterBoxId());
         if (optionalShowtime.isPresent() && movie.isPresent() && theaterBox.isPresent()){
             Showtime showtime = optionalShowtime.get();
             showtime.setDateTime(body.getDateTime());

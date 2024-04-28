@@ -9,35 +9,33 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ReservationReserveBody
+ * IdCurrentlyPlayingBody
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-11T20:35:28.031354+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-27T18:43:33.268443-04:00[America/New_York]")
 
 
-public class ReservationReserveBody   {
-  @JsonProperty("seats")
-  private Integer seats = null;
+public class IdCurrentlyPlayingBody   {
+  @JsonProperty("currentlyPlaying")
+  private Boolean currentlyPlaying = null;
 
-  public ReservationReserveBody seats(Integer seats) {
-    this.seats = seats;
+  public IdCurrentlyPlayingBody currentlyPlaying(Boolean currentlyPlaying) {
+    this.currentlyPlaying = currentlyPlaying;
     return this;
   }
 
   /**
-   * Number of seats to reserve.
-   * minimum: 1
-   * @return seats
+   * Get currentlyPlaying
+   * @return currentlyPlaying
    **/
-  @Schema(required = true, description = "Number of seats to reserve.")
-      @NotNull
-
-  @Min(1)  public Integer getSeats() {
-    return seats;
+  @Schema(description = "")
+  
+    public Boolean isCurrentlyPlaying() {
+    return currentlyPlaying;
   }
 
-  public void setSeats(Integer seats) {
-    this.seats = seats;
+  public void setCurrentlyPlaying(Boolean currentlyPlaying) {
+    this.currentlyPlaying = currentlyPlaying;
   }
 
 
@@ -49,21 +47,21 @@ public class ReservationReserveBody   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReservationReserveBody reservationReserveBody = (ReservationReserveBody) o;
-    return Objects.equals(this.seats, reservationReserveBody.seats);
+    IdCurrentlyPlayingBody idCurrentlyPlayingBody = (IdCurrentlyPlayingBody) o;
+    return Objects.equals(this.currentlyPlaying, idCurrentlyPlayingBody.currentlyPlaying);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(seats);
+    return Objects.hash(currentlyPlaying);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ReservationReserveBody {\n");
+    sb.append("class IdCurrentlyPlayingBody {\n");
     
-    sb.append("    seats: ").append(toIndentedString(seats)).append("\n");
+    sb.append("    currentlyPlaying: ").append(toIndentedString(currentlyPlaying)).append("\n");
     sb.append("}");
     return sb.toString();
   }
