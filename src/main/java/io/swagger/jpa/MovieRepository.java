@@ -19,7 +19,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
        "FROM Movie m " +
        "JOIN m.showtimes s " +
        "JOIN s.reservations r " +
-       "JOIN r.theaterBox tb " +
+       "JOIN s.theaterBox tb " +
        "WHERE s.dateTime BETWEEN :startTime AND :endTime " +
        "GROUP BY m.title")
     List<Object[]> findTotalRevenueByMovie(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);

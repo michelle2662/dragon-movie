@@ -50,11 +50,11 @@ public class Showtime {
 
   @ManyToOne
   @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
-  @JsonBackReference
+  @JsonBackReference("theaterBox-showtime")
   private TheaterBox theaterBox = null;
 
   @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
+  @JsonManagedReference("showtime-reservation")
   private Set<Reservation> reservations;
 
   public Showtime() {

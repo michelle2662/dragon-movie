@@ -127,6 +127,9 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 	public ResponseEntity<List<TheaterBox>> theaterBoxesPost(
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body) {
 		try {
+			if (theaterBoxRepository.existsByBoxNumber(body.getBoxNumber())) {
+				return ResponseEntity.status(HttpStatus.CONFLICT).build();  // HTTP 409 Conflict
+			}
 			// Save the new theater box to the database
 			TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
 

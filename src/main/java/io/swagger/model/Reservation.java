@@ -32,14 +32,12 @@ public class Reservation {
 	private Long id = null;
 
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference("showtime-reservation")
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
 	private Showtime showtime = null;
 	
-	@ManyToOne
-	@JsonBackReference
-    @JoinColumn(name = "theater_box_id", referencedColumnName = "id")
-    private TheaterBox theaterBox = null;
+	@JsonProperty("memberId")
+	private Long memberId = null;
 
 	@JsonProperty("seatsReserved")
 	private Integer seatsReserved = null;
@@ -48,10 +46,9 @@ public class Reservation {
 
 	}
 
-	public Reservation(Long id, Showtime showtime, TheaterBox theaterBox, Integer seatsReserved) {
+	public Reservation(Long id, Showtime showtime, Integer seatsReserved) {
 		this.id = id;
 		this.showtime = showtime;
-		this.theaterBox = theaterBox;
 		this.seatsReserved = seatsReserved;
 	}
 
@@ -77,21 +74,6 @@ public class Reservation {
 		this.showtime = showtime;
 	}
 
-	public Reservation theaterBox(TheaterBox theaterBox) {
-		this.theaterBox = theaterBox;
-		return this;
-	}
-
-	@Schema(description = "")
-	@Valid
-	public TheaterBox getTheaterBox() {
-		return theaterBox;
-	}
-
-	public void setTheaterBox(TheaterBox theaterBox) {
-		this.theaterBox = theaterBox;
-	}
-
 	@Schema(description = "Number of seats reserved")
 	public Integer getSeatsReserved() {
 		return seatsReserved;
@@ -106,6 +88,20 @@ public class Reservation {
 		return this;
 	}
 	
+	public Reservation memberId(Long memberId) {
+		this.memberId = memberId;
+		return this;
+	}
+	
+	public Long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+
+
 
 	@Override
 	public boolean equals(java.lang.Object o) {
@@ -117,17 +113,17 @@ public class Reservation {
 		}
 		Reservation reservation = (Reservation) o;
 		return Objects.equals(this.id, reservation.id) && Objects.equals(this.showtime, reservation.showtime)
-				&& Objects.equals(this.theaterBox, reservation.theaterBox) && Objects.equals(this.seatsReserved, reservation.seatsReserved);
+				&& Objects.equals(this.seatsReserved, reservation.seatsReserved);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, showtime, theaterBox, seatsReserved);
+		return Objects.hash(id, showtime, seatsReserved);
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", showtime=" + showtime+ ", theaterBoxNumber=" + theaterBox + ", seatsReserved=" + seatsReserved + "]";
+		return "Reservation [id=" + id + ", showtime=" + showtime+ ", seatsReserved=" + seatsReserved + "]";
 	}
 
 }
