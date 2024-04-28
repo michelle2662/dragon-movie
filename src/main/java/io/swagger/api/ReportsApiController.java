@@ -57,8 +57,11 @@ public class ReportsApiController implements ReportsApi {
     }
 
     public ResponseEntity<Map<String, BigDecimal>> reportsSummaryGet(
-            @NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "start_date_time", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
-        List<Object[]> results = movieRepository.findTotalRevenueByMovie(startDateTime, endDateTime);
+            @NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "start_date_time", required = true) String startDateTime,
+            @NotNull @Parameter(in = ParameterIn.QUERY, description = "End date of the report period.", required = true, schema = @Schema()) @Valid @RequestParam(value = "end_date_time", required = true) String endDateTime) {
+        LocalDateTime startDateTimeParsed = LocalDateTime.parse(startDateTime);
+        LocalDateTime endDateTimeParsed = LocalDateTime.parse(endDateTime);
+        List<Object[]> results = movieRepository.findTotalRevenueByMovie(startDateTimeParsed, endDateTimeParsed);
         Map<String, BigDecimal> response = new HashMap<>();
 
         for (Object[] result : results) {

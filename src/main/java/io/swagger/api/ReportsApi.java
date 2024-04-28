@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,8 +48,8 @@ public interface ReportsApi {
     @RequestMapping(value = "/reports/summary",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Map<String, BigDecimal>> reportsSummaryGet(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "start_date_time", required = true) LocalDateTime startDateTime
-, @NotNull @Parameter(in = ParameterIn.QUERY, description = "End date of the report period." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "end_date_time", required = true) LocalDateTime endDateTime
+    ResponseEntity<Map<String, BigDecimal>> reportsSummaryGet(@NotNull @Parameter(in = ParameterIn.QUERY, description = "Start date of the report period." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "start_date_time", required = true) String startDateTime
+, @NotNull @Parameter(in = ParameterIn.QUERY, description = "End date of the report period." ,required=true,schema=@Schema()) @Valid @RequestParam(value = "end_date_time", required = true) String endDateTime
 );
 
 }
