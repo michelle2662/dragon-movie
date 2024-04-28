@@ -1,16 +1,21 @@
 package io.swagger.api;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import io.swagger.jpa.MovieRepository;
+import io.swagger.jpa.ShowtimeRepository;
+import io.swagger.model.IdCurrentlyPlayingBody;
 import io.swagger.model.Movie;
 import io.swagger.model.MovieRequestBody;
+import io.swagger.model.Showtime;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +40,39 @@ public class MoviesApiController implements MoviesApi {
 
 	private final HttpServletRequest request;
 	
+	private final ObjectMapper objectMapper;
+
 	private static final String API_PATH = "apis/MORGANMAZER/dragon/1.0/";
 	
 	@Autowired
 	private MovieRepository movieRepository;
 
 	@Autowired
-	public MoviesApiController(HttpServletRequest request) {
+	private ShowtimeRepository showtimeRepository;
+
+	@Autowired
+	public MoviesApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+		this.objectMapper = objectMapper;
 		this.request = request;
 	}
 	
-    public ResponseEntity<List<Movie>> moviesGet() {
-        log.info("GET /movies");
-        
-        List<Movie> movies = movieRepository.findAll();
-        return ResponseEntity.ok().body(movies);
-    }
+	public ResponseEntity<List<Movie>> moviesGet(
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by rating", schema = @Schema()) @Valid @RequestParam(value = "rating", required = false) String rating,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by genre", schema = @Schema()) @Valid @RequestParam(value = "genre", required = false) String genre,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by title", schema = @Schema()) @Valid @RequestParam(value = "title", required = false) String title,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by length", schema = @Schema()) @Valid @RequestParam(value = "length", required = false) String length,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by release date", schema = @Schema()) @Valid @RequestParam(value = "releaseDate", required = false) LocalDate releaseDate,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by director", schema = @Schema()) @Valid @RequestParam(value = "director", required = false) String director,
+			@Parameter(in = ParameterIn.QUERY, description = "Filter movies by review score", schema = @Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore) {
+		log.info("GET /movies");
+		/**
+		 * List<Movie> movies = movieRepository.findAll();
+		 * return ResponseEntity.ok().body(movies);
+		 */
+		List<Movie> movies = movieRepository.findByAttributes(rating, genre, title, length, releaseDate, director,
+				reviewScore);
+		return ResponseEntity.ok(movies);
+	}
 
 	public ResponseEntity<Movie> moviesIdDelete(
 			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required = true, schema = @Schema()) @PathVariable("id") Integer id) {
@@ -163,4 +185,27 @@ public class MoviesApiController implements MoviesApi {
 
 	}
 
+	public ResponseEntity<List<Showtime>> moviesIdShowtimesGet(
+			@Parameter(in = ParameterIn.PATH, description = "ID of the movie to retrieve showtimes for.", required = true, schema = @Schema()) @PathVariable("id") Long id) {
+		log.info("GET /movies/{}/showtimes", id);
+
+		List<Showtime> showtimes = showtimeRepository.findByMovieId(id);
+		return ResponseEntity.ok(showtimes);
+	}
+
+	public ResponseEntity<Void> moviesIdCurrentlyPlayingPut(
+			@Parameter(in = ParameterIn.PATH, description = "ID of the movie to update the currently playing status for.", required = true, schema = @Schema()) @PathVariable("id") Long id,
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody IdCurrentlyPlayingBody body) {
+		log.info("PUT /movies/{}/currentlyPlaying", id);
+
+		Optional<Movie> optionalMovie = movieRepository.findById(id);
+		if (optionalMovie.isPresent()) {
+			Movie movie = optionalMovie.get();
+			movie.setCurrentlyPlaying(body.isCurrentlyPlaying());
+			movieRepository.save(movie);
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

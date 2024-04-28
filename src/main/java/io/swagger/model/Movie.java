@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * Movie
@@ -47,6 +48,7 @@ public class Movie {
 	private String rating = null;
 
 	@JsonProperty("length")
+	@Pattern(regexp = "\\d+h\\d+m")
 	private String length = null;
 
 	@JsonProperty("releaseDate")
@@ -197,6 +199,11 @@ public class Movie {
 
 	public void setShowtimes(Set<Showtime> showtimes) {
 		this.showtimes = showtimes;
+	}
+
+	public void addShowtime(Showtime showtime) {
+		showtimes.add(showtime);
+		showtime.setMovie(this);
 	}
 
 	@Override

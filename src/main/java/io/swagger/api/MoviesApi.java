@@ -8,6 +8,8 @@ package io.swagger.api;
 import java.math.BigDecimal;
 import io.swagger.model.Movie;
 import io.swagger.model.MovieRequestBody;
+import io.swagger.model.IdCurrentlyPlayingBody;
+import io.swagger.model.Showtime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.threeten.bp.LocalDate;
 import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
@@ -38,13 +41,20 @@ import java.util.Map;
 @Validated
 public interface MoviesApi {
 
-    @Operation(summary = "Get all movies", description = "Get details of all movies", tags={  })
+    @Operation(summary = "Get all movies", description = "Get details of all movies with optional filtering", tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A list of movies", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Movie.class)))) })
+        @ApiResponse(responseCode = "200", description = "A list of movies matching the filter criteria", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Movie.class)))) })
     @RequestMapping(value = "/movies",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<Movie>> moviesGet();
+    ResponseEntity<List<Movie>> moviesGet(@Parameter(in = ParameterIn.QUERY, description = "Filter movies by rating" ,schema=@Schema()) @Valid @RequestParam(value = "rating", required = false) String rating
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by genre" ,schema=@Schema()) @Valid @RequestParam(value = "genre", required = false) String genre
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by title" ,schema=@Schema()) @Valid @RequestParam(value = "title", required = false) String title
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by length" ,schema=@Schema()) @Valid @RequestParam(value = "length", required = false) String length
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by release date" ,schema=@Schema()) @Valid @RequestParam(value = "releaseDate", required = false) LocalDate releaseDate
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by director" ,schema=@Schema()) @Valid @RequestParam(value = "director", required = false) String director
+, @Parameter(in = ParameterIn.QUERY, description = "Filter movies by review score" ,schema=@Schema()) @Valid @RequestParam(value = "reviewScore", required = false) BigDecimal reviewScore
+);
 
 
     @Operation(summary = "Delete a movie", description = "Allows an admin to delete a movie", security = {
@@ -105,5 +115,31 @@ public interface MoviesApi {
     ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody MovieRequestBody body
 );
 
+
+@Operation(summary = "Set a movie's currently playing status", description = "Allows an admin to set a movie's currently playing status.", security = {
+    @SecurityRequirement(name = "bearerAuth")    }, tags={  })
+@ApiResponses(value = { 
+    @ApiResponse(responseCode = "200", description = "Movie's currently playing status updated successfully."),
+    
+    @ApiResponse(responseCode = "403", description = "Forbidden. Only admins are allowed to perform this action.") })
+@RequestMapping(value = "/movies/{id}/currentlyPlaying",
+    consumes = { "application/json" }, 
+    method = RequestMethod.PUT)
+ResponseEntity<Void> moviesIdCurrentlyPlayingPut(@Parameter(in = ParameterIn.PATH, description = "ID of the movie to update the currently playing status for.", required=true, schema=@Schema()) @PathVariable("id") Long id
+, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody IdCurrentlyPlayingBody body
+);
+
+
+@Operation(summary = "Get showtimes for a specific movie", description = "Returns a list of showtimes for a specific movie.", tags={  })
+@ApiResponses(value = { 
+    @ApiResponse(responseCode = "200", description = "A list of showtimes for the specified movie.", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Showtime.class)))) })
+@RequestMapping(value = "/movies/{id}/showtimes",
+    produces = { "application/json" }, 
+    method = RequestMethod.GET)
+ResponseEntity<List<Showtime>> moviesIdShowtimesGet(@Parameter(in = ParameterIn.PATH, description = "ID of the movie to retrieve showtimes for.", required=true, schema=@Schema()) @PathVariable("id") Long id
+);
+
 }
+
+
 

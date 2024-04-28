@@ -1,6 +1,9 @@
 package io.swagger.jpa;
 
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +23,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
        "WHERE s.dateTime BETWEEN :startTime AND :endTime " +
        "GROUP BY m.title")
     List<Object[]> findTotalRevenueByMovie(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+
+    List<Movie> findByAttributes(String rating, String genre, String title, String length, LocalDate releaseDate, String director, BigDecimal reviewScore);
 }

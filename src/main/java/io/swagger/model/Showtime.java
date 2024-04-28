@@ -23,6 +23,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -33,6 +35,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-19T15:29:40.414361-04:00[America/New_York]")
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "date_time", "movie_id", "theater_box_id" }) })
 public class Showtime {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -145,6 +148,11 @@ public class Showtime {
     this.reservations = reservations;
     return this;
   }
+
+  public void addReservation(Reservation reservation) {
+    reservations.add(reservation);
+    reservation.setShowtime(this);
+}
 
   @Override
   public boolean equals(java.lang.Object o) {

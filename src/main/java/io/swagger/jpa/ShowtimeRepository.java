@@ -15,4 +15,7 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
 
     @Query("SELECT s.movie FROM Showtime s WHERE s.id = :showtimeId")
     List<Movie> findMoviesByShowtimeId(@Param("showtimeId") Long showtimeId);
+
+    List<Showtime> findByMovieId(Long movieId);
+
 }

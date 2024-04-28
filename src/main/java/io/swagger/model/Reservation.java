@@ -105,6 +105,7 @@ public class Reservation {
 		this.seatsReserved = seatsReserved;
 		return this;
 	}
+	
 
 	@Override
 	public boolean equals(java.lang.Object o) {
