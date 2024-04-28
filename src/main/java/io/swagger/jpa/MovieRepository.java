@@ -24,5 +24,19 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
        "GROUP BY m.title")
     List<Object[]> findTotalRevenueByMovie(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 
-    List<Movie> findByAttributes(String rating, String genre, String title, String length, LocalDate releaseDate, String director, BigDecimal reviewScore);
+    @Query("SELECT m FROM Movie m WHERE " +
+            "(:rating IS NULL OR m.rating = :rating) AND " +
+            "(:genre IS NULL OR m.genre = :genre) AND " +
+            "(:title IS NULL OR m.title = :title) AND " +
+            "(:length IS NULL OR m.length = :length) AND " +
+            "(:releaseDate IS NULL OR m.releaseDate = :releaseDate) AND " +
+            "(:director IS NULL OR m.director = :director) AND " +
+            "(:reviewScore IS NULL OR m.reviewScore = :reviewScore)")
+    List<Movie> findByOptionalAttributes(@Param("rating") String rating,
+            @Param("genre") String genre,
+            @Param("title") String title,
+            @Param("length") String length,
+            @Param("releaseDate") LocalDate releaseDate,
+            @Param("director") String director,
+            @Param("reviewScore") BigDecimal reviewScore);
 }

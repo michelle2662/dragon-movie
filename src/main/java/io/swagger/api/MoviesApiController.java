@@ -69,7 +69,7 @@ public class MoviesApiController implements MoviesApi {
 		 * List<Movie> movies = movieRepository.findAll();
 		 * return ResponseEntity.ok().body(movies);
 		 */
-		List<Movie> movies = movieRepository.findByAttributes(rating, genre, title, length, releaseDate, director,
+		List<Movie> movies = movieRepository.findByOptionalAttributes(rating, genre, title, length, releaseDate, director,
 				reviewScore);
 		return ResponseEntity.ok(movies);
 	}
