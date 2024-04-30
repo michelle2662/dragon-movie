@@ -31,7 +31,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-       // new AntPathRequestMatcher("/movies/**"),
+        new AntPathRequestMatcher("/movies/**"),
         new AntPathRequestMatcher("/membership"),
         new AntPathRequestMatcher("/theater_boxes/**"),
         //new AntPathRequestMatcher("/showtimes/**"),
