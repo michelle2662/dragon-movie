@@ -1,6 +1,8 @@
 package io.swagger.api;
 
 import io.swagger.jpa.TheaterBoxRepository;
+import io.swagger.model.Reservation;
+import io.swagger.model.Showtime;
 import io.swagger.model.TheaterBox;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,13 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +52,14 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 		this.request = request;
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<List<TheaterBox>> theaterBoxesGet(){
+
+			List<TheaterBox> theaterBox = theaterBoxRepository.findAll();
+			return ResponseEntity.ok().body(theaterBox);
+
+	}
+
 	public ResponseEntity<TheaterBox> theaterBoxesBoxNumberGet(
 			@Parameter(in = ParameterIn.PATH, description = "Number of the theater box to retrieve details for.", required = true, schema = @Schema()) @PathVariable("box_number") Integer boxNumber) {
 
@@ -72,17 +77,8 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 
 	}
 
-	public ResponseEntity<List<TheaterBox>> theaterBoxesGet() {
 
-		try {
-			List<TheaterBox> theaterBoxes = theaterBoxRepository.findAll();
-			return new ResponseEntity<>(theaterBoxes, HttpStatus.OK);
-		} catch (Exception e) {
-			log.error("Error retrieving theater boxes", e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}
+	@PreAuthorize("hasRole('ADMIN')")
 
 	public ResponseEntity<Void> theaterBoxesIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to delete.", required=true, schema=@Schema()) @PathVariable("id") Long id
 	) {
@@ -100,8 +96,9 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
-		public ResponseEntity<Void> theaterBoxesIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to update.", required=true, schema=@Schema()) @PathVariable("id") Long id
+
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Void> theaterBoxesIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the theater box to update.", required=true, schema=@Schema()) @PathVariable("id") Long id
 	,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
 	) {
 		try {
@@ -122,25 +119,33 @@ public class TheaterBoxesApiController implements TheaterBoxesApi {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-	
+
+
+	@PreAuthorize("hasRole('ADMIN')")
 
 	public ResponseEntity<List<TheaterBox>> theaterBoxesPost(
-			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body) {
-		try {
-			if (theaterBoxRepository.existsByBoxNumber(body.getBoxNumber())) {
-				return ResponseEntity.status(HttpStatus.CONFLICT).build();  // HTTP 409 Conflict
+			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody TheaterBox body
+			) {
+
+
+			try {
+					if (theaterBoxRepository.existsByBoxNumber(body.getBoxNumber())) {
+						return ResponseEntity.status(HttpStatus.CONFLICT).build();  // HTTP 409 Conflict
+					}
+
+				// Save the new theater box to the database
+				TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
+
+				// Return the newly created theater box in the response
+				List<TheaterBox> theaterBoxList = Collections.singletonList(savedTheaterBox);
+				return new ResponseEntity<>(theaterBoxList, HttpStatus.CREATED);
+			} catch (Exception e) {
+				log.error("Error creating new theater box", e);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
 			}
-			// Save the new theater box to the database
-			TheaterBox savedTheaterBox = theaterBoxRepository.save(body);
-
-			// Return the newly created theater box in the response
-			List<TheaterBox> theaterBoxList = Collections.singletonList(savedTheaterBox);
-			return new ResponseEntity<>(theaterBoxList, HttpStatus.CREATED);
-		} catch (Exception e) {
-			log.error("Error creating new theater box", e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
 	}
+
+
 
 }

@@ -2,6 +2,10 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.TheaterBox;
@@ -35,7 +39,7 @@ public class Reservation {
 	@JsonBackReference("showtime-reservation")
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
 	private Showtime showtime = null;
-	
+
 	@ManyToOne
 	@JsonBackReference("membership-reservation")
 	@JoinColumn(name = "member_id", referencedColumnName = "id")
@@ -103,8 +107,6 @@ public class Reservation {
 	public void setMember(Membership member) {
 		this.member = member;
 	}
-
-
 
 	@Override
 	public boolean equals(java.lang.Object o) {

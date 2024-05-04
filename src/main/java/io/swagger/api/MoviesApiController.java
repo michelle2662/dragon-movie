@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.threeten.bp.LocalDate;
@@ -74,6 +75,19 @@ public class MoviesApiController implements MoviesApi {
 		return ResponseEntity.ok(movies);
 	}
 
+	public ResponseEntity<List<Movie>> getCurrentlyPlayingMovies() {
+		log.info("GET /movies/currently-playing");
+		List<Movie> currentlyPlayingMovies = movieRepository.findByCurrentlyPlayingTrue();
+		return ResponseEntity.ok(currentlyPlayingMovies);
+	}
+
+	public ResponseEntity<List<Movie>> getComingSoonMovies() {
+		log.info("GET /movies/coming-soon");
+		List<Movie> upcomingMovies = movieRepository.findByUpcomingReleaseTrue();
+		return ResponseEntity.ok(upcomingMovies);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Movie> moviesIdDelete(
 			@Parameter(in = ParameterIn.PATH, description = "the id of the movie to delete", required = true, schema = @Schema()) @PathVariable("id") Integer id) {
 		log.info("DELETE /movies id" + id);
@@ -97,7 +111,8 @@ public class MoviesApiController implements MoviesApi {
 		}
 	}
 
-    public ResponseEntity<Movie> moviesIdPut(@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required=true, schema=@Schema()) @PathVariable("id") Integer id
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Movie> moviesIdPut(@Parameter(in = ParameterIn.PATH, description = "the id of the movie to update", required=true, schema=@Schema()) @PathVariable("id") Integer id
 ,@Parameter(in = ParameterIn.QUERY, description = "the title of the movie to update" ,schema=@Schema()) @Valid @RequestParam(value = "title", required = false) String title
 ,@Parameter(in = ParameterIn.QUERY, description = "the updated director" ,schema=@Schema()) @Valid @RequestParam(value = "director", required = false) String director
 ,@Parameter(in = ParameterIn.QUERY, description = "the updated genre" ,schema=@Schema()) @Valid @RequestParam(value = "genre", required = false) String genre
@@ -155,7 +170,8 @@ public class MoviesApiController implements MoviesApi {
 
 	}
 
-    public ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody MovieRequestBody body
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Movie> moviesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody MovieRequestBody body
 ) {
 		log.info("POST /movies " + body.toString());
 
@@ -167,6 +183,7 @@ public class MoviesApiController implements MoviesApi {
 		movie.setRating(body.getRating());
 		movie.setLength(body.getLength());
 		movie.setRating(body.getRating());
+		movie.setReviewScore(body.getReviewScore());
 		movie.setReleaseDate(body.getReleaseDate());
 		movie.setCurrentlyPlaying(body.isCurrentlyPlaying());
 		movie.setUpcomingRelease(body.isUpcomingRelease());
@@ -193,6 +210,8 @@ public class MoviesApiController implements MoviesApi {
 		return ResponseEntity.ok(showtimes);
 	}
 
+
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> moviesIdCurrentlyPlayingPut(
 			@Parameter(in = ParameterIn.PATH, description = "ID of the movie to update the currently playing status for.", required = true, schema = @Schema()) @PathVariable("id") Long id,
 			@Parameter(in = ParameterIn.DEFAULT, description = "", required = true, schema = @Schema()) @Valid @RequestBody IdCurrentlyPlayingBody body) {

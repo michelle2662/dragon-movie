@@ -54,9 +54,11 @@ public class DatabaseInitialization {
             membershipRepository.save(membership3);
 
             // Theater Boxes
-            TheaterBox theaterBox1 = new TheaterBox(1L, 1, 50, 0, 12.99f);
-            TheaterBox theaterBox2 = new TheaterBox(2L, 2, 60, 0, 14.99f);
-            TheaterBox theaterBox3 = new TheaterBox(3L, 3, 70, 0, 16.99f);
+            TheaterBox theaterBox1 = new TheaterBox(1L, 1, 50, 5, 12.99f);
+
+            //create theater box with no available seats so reservations can't be made
+            TheaterBox theaterBox2 = new TheaterBox(2L, 2, 60, 60, 14.99f);
+            TheaterBox theaterBox3 = new TheaterBox(3L, 3, 70, 2, 16.99f);
             theaterBoxRepository.save(theaterBox1);
             theaterBoxRepository.save(theaterBox2);
             theaterBoxRepository.save(theaterBox3);
@@ -72,7 +74,7 @@ public class DatabaseInitialization {
             // Reservations
             Reservation reservation1 = new Reservation(1L, showtime1, 3);
             Reservation reservation2 = new Reservation(2L, showtime1, 2);
-            Reservation reservation3 = new Reservation(3L, showtime2, 4);
+            Reservation reservation3 = new Reservation(3L, showtime2, 60);
             Reservation reservation4 = new Reservation(4L, showtime3, 2);
             reservationRepository.save(reservation1);
             reservationRepository.save(reservation2);

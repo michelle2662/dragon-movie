@@ -39,7 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         new AntPathRequestMatcher("/showtimes/*/movies", HttpMethod.GET.name()),
         new AntPathRequestMatcher("/auth/**"),
         new AntPathRequestMatcher("/"),
-        new AntPathRequestMatcher("/swagger-ui/**")
+            new AntPathRequestMatcher("/swagger-ui/**")
+
+
     );
 
     private static final RequestMatcher MEMBER_URLS = new OrRequestMatcher(
@@ -55,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         new AntPathRequestMatcher("/showtimes", HttpMethod.POST.name()),
         new AntPathRequestMatcher("/showtimes/*", HttpMethod.PUT.name()),
         new AntPathRequestMatcher("/showtimes/*", HttpMethod.DELETE.name()),
-        new AntPathRequestMatcher("/reservations/**"),
+        //new AntPathRequestMatcher("/reservations/**"),
         new AntPathRequestMatcher("/reports/summary", HttpMethod.GET.name())
     );
 

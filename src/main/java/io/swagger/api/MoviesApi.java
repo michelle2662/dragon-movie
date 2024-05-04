@@ -139,6 +139,22 @@ ResponseEntity<Void> moviesIdCurrentlyPlayingPut(@Parameter(in = ParameterIn.PAT
 ResponseEntity<List<Showtime>> moviesIdShowtimesGet(@Parameter(in = ParameterIn.PATH, description = "ID of the movie to retrieve showtimes for.", required=true, schema=@Schema()) @PathVariable("id") Long id
 );
 
+    @Operation(summary = "Get currently playing movies", description = "Get details of all movies that are currently playing at the theater.", tags={ "movies" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of currently playing movies", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Movie.class)))) })
+    @RequestMapping(value = "/movies/currently-playing",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Movie>> getCurrentlyPlayingMovies();
+
+    @Operation(summary = "Get upcoming movies", description = "Get details of all movies that are scheduled to release soon.", tags={ "movies" })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "A list of upcoming movies", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Movie.class)))) })
+    @RequestMapping(value = "/movies/upcoming",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Movie>> getComingSoonMovies();
+
 }
 
 

@@ -3,10 +3,8 @@ package io.swagger.api;
 import io.swagger.jpa.MembershipRepository;
 import io.swagger.jpa.ReservationRepository;
 import io.swagger.jpa.ShowtimeRepository;
-import io.swagger.model.Membership;
-import io.swagger.model.Reservation;
-import io.swagger.model.ReservationsBody;
-import io.swagger.model.ReservationsReservationIdBody;
+import io.swagger.jpa.TheaterBoxRepository;
+import io.swagger.model.*;
 import io.swagger.security.JwtTokenProvider;
 import io.swagger.service.MembershipService;
 
@@ -24,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +60,9 @@ public class ReservationsApiController implements ReservationsApi {
     private ShowtimeRepository showtimeRepository;
 
     @Autowired
+    private TheaterBoxRepository theaterBoxRepository;
+
+    @Autowired
     private MembershipRepository membershipRepository;
 
     @Autowired
@@ -91,12 +93,15 @@ public class ReservationsApiController implements ReservationsApi {
         
     }
 
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<Reservation> reservationsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationsBody body, @RequestHeader("Authorization") String token
 ) {
         log.info("POST /reservations");
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
         Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
+
+        System.out.println("email: " + email);
 
         if (!optionalMembership.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -112,11 +117,22 @@ public class ReservationsApiController implements ReservationsApi {
         reservation.setSeatsReserved(body.getSeatsReserved());
         reservation.setMember(membership);
 
+
+        TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(showtimeRepository.findById(body.getShowtimeId()).get().getTheaterBox().getBoxNumber());
+
+        if (theaterBox.getReservedSeats() + body.getSeatsReserved() <= theaterBox.getTotalSeats()){
+            theaterBox.setReservedSeats(body.getSeatsReserved() + theaterBox.getReservedSeats());
+            theaterBoxRepository.save(theaterBox);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         Reservation savedReservation = reservationRepository.save(reservation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
     }
 
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<Void> reservationsReservationIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the reservation to cancel.", required=true, schema=@Schema()) @PathVariable("reservation_id") Long reservationId, @RequestHeader("Authorization") String token
 ) {
         log.info("DELETE /reservations/{}", reservationId);
@@ -148,6 +164,7 @@ public class ReservationsApiController implements ReservationsApi {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<Reservation> reservationsReservationIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the reservation to update.", required=true, schema=@Schema()) @PathVariable("reservation_id") Long reservationId
 ,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationsReservationIdBody body, @RequestHeader("Authorization") String token
 ) {
@@ -155,6 +172,8 @@ public class ReservationsApiController implements ReservationsApi {
 
         String email = jwtTokenProvider.getUsernameFromToken(token.substring(7));
         Optional<Membership> optionalMembership = membershipRepository.findByEmail(email);
+
+        System.out.println(optionalMembership.get());
 
         if (!optionalMembership.isPresent()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -175,12 +194,24 @@ public class ReservationsApiController implements ReservationsApi {
             return ResponseEntity.notFound().build();
         }
 
-        reservation.setShowtime(showtimeRepository.findById(body.getShowtimeId()).get());
-        reservation.setSeatsReserved(body.getSeatsReserved());
+        long showtimeId = reservationRepository.findById(reservationId).get().getShowtime().getId();
+        TheaterBox theaterBox = theaterBoxRepository.findByBoxNumber(showtimeRepository.findById(showtimeId).get().getTheaterBox().getBoxNumber());
 
-        Reservation updatedReservation = reservationRepository.save(reservation);
+        int diff = body.getSeatsReserved() - reservation.getSeatsReserved() ;
 
-        return ResponseEntity.ok(updatedReservation);
+        if (theaterBox.getReservedSeats() + diff <= theaterBox.getTotalSeats()){
+            reservation.setShowtime(showtimeRepository.findById(body.getShowtimeId()).get());
+            reservation.setSeatsReserved(body.getSeatsReserved());
+            theaterBox.setReservedSeats(theaterBox.getReservedSeats() + diff);
+            theaterBoxRepository.save(theaterBox);
+
+            Reservation updatedReservation = reservationRepository.save(reservation);
+            return ResponseEntity.ok(updatedReservation);
+
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
     }
 
 }

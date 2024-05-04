@@ -54,19 +54,19 @@ public interface ReservationsApi {
         @SecurityRequirement(name = "bearerAuth")    }, tags={  })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "201", description = "Reservation successfully created.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Reservation.class))),
-        
+
         @ApiResponse(responseCode = "400", description = "Bad request. Invalid data provided."),
-        
+
         @ApiResponse(responseCode = "401", description = "Unauthorized. Member access token is invalid."),
-        
+
         @ApiResponse(responseCode = "404", description = "Not found. Showtime not found."),
-        
+
         @ApiResponse(responseCode = "409", description = "Conflict. Requested number of seats not available.") })
     @RequestMapping(value = "/reservations",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
+        produces = { "application/json" },
+        consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Reservation> reservationsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationsBody body, @RequestHeader("Authorization") String token
+    ResponseEntity<Reservation> reservationsPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ReservationsBody body,@RequestHeader("Authorization") String token
 );
 
 

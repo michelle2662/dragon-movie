@@ -35,6 +35,7 @@ public class TheaterBox {
 	
 	@Column(unique = true)
 	@JsonProperty("box_number")
+
     private Integer boxNumber = null;
 
 	@JsonProperty("total_seats")

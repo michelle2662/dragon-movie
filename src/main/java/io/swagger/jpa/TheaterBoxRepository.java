@@ -7,6 +7,7 @@ import io.swagger.model.TheaterBox;
 
 //@Repository
 public interface TheaterBoxRepository extends JpaRepository<TheaterBox, Long> {
+
     TheaterBox findByBoxNumber(Integer boxNumber);
     Boolean existsByBoxNumber(Integer boxNumber);
 }

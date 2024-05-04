@@ -39,4 +39,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             @Param("releaseDate") LocalDate releaseDate,
             @Param("director") String director,
             @Param("reviewScore") BigDecimal reviewScore);
+
+    @Query("SELECT m FROM Movie m WHERE m.currentlyPlaying = TRUE")
+    List<Movie> findByCurrentlyPlayingTrue();
+
+    @Query("SELECT m FROM Movie m WHERE m.upcomingRelease = TRUE")
+    List<Movie> findByUpcomingReleaseTrue();
+
 }

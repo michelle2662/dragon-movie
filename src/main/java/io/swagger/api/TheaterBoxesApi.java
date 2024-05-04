@@ -46,13 +46,15 @@ public interface TheaterBoxesApi {
 );
 
 
-    @Operation(summary = "Get details of all theater boxes", description = "Returns details of all theater boxes.", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "A list of theater boxes.", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TheaterBox.class)))) })
+    @Operation(summary = "Get details of all theater boxes", description = "Returns details of all theater boxes.", security = {
+            @SecurityRequirement(name = "bearerAuth")    },  tags={  })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "A list of all theater boxes.", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = TheaterBox.class)))) })
     @RequestMapping(value = "/theater_boxes",
-        produces = { "application/json" }, 
+        produces = { "application/json" },
         method = RequestMethod.GET)
-    ResponseEntity<List<TheaterBox>> theaterBoxesGet();
+    ResponseEntity<List<TheaterBox>> theaterBoxesGet(
+    );
 
 
     @Operation(summary = "Delete a theater box", description = "Allows an admin to delete a theater box.", security = {
@@ -92,6 +94,10 @@ public interface TheaterBoxesApi {
         method = RequestMethod.POST)
     ResponseEntity<List<TheaterBox>> theaterBoxesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody TheaterBox body
 );
+
+
+
+
 
 }
 

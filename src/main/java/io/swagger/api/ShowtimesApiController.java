@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +59,7 @@ public class ShowtimesApiController implements ShowtimesApi {
         return ResponseEntity.ok().body(showtimes);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> showtimesPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body) {
         log.info("POST /showtimes");
 
@@ -77,6 +79,7 @@ public class ShowtimesApiController implements ShowtimesApi {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> showtimesShowtimeIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to delete.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 ) {
         log.info("DELETE /showtimes/{}", showtimeId);
@@ -108,6 +111,7 @@ public class ShowtimesApiController implements ShowtimesApi {
                 return ResponseEntity.ok(movies);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> showtimesShowtimeIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the showtime to update.", required=true, schema=@Schema()) @PathVariable("showtime_id") Long showtimeId
 ,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody ShowtimeRequestBody body
 ) {
