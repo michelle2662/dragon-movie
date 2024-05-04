@@ -72,10 +72,10 @@ public class DatabaseInitialization {
             showtimeRepository.save(showtime3);
 
             // Reservations
-            Reservation reservation1 = new Reservation(1L, showtime1, 3);
-            Reservation reservation2 = new Reservation(2L, showtime1, 2);
-            Reservation reservation3 = new Reservation(3L, showtime2, 60);
-            Reservation reservation4 = new Reservation(4L, showtime3, 2);
+            Reservation reservation1 = new Reservation(1L, showtime1, 3, membership2);
+            Reservation reservation2 = new Reservation(2L, showtime1, 2, membership2);
+            Reservation reservation3 = new Reservation(3L, showtime2, 60,membership2);
+            Reservation reservation4 = new Reservation(4L, showtime3, 2, membership2);
             reservationRepository.save(reservation1);
             reservationRepository.save(reservation2);
             reservationRepository.save(reservation3);

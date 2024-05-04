@@ -43,7 +43,6 @@ public class Reservation {
 	@ManyToOne
 	@JsonBackReference("membership-reservation")
 	@JoinColumn(name = "member_id", referencedColumnName = "id")
-	@JsonProperty("memberId")
 	private Membership member = null;
 
 	@JsonProperty("seatsReserved")
@@ -53,10 +52,11 @@ public class Reservation {
 
 	}
 
-	public Reservation(Long id, Showtime showtime, Integer seatsReserved) {
+	public Reservation(Long id, Showtime showtime, Integer seatsReserved, Membership member) {
 		this.id = id;
 		this.showtime = showtime;
 		this.seatsReserved = seatsReserved;
+		this.member = member;
 	}
 
 	@Schema(description = "Identifier for reservation")
